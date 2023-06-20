@@ -7,8 +7,9 @@ const IndexPage: React.FC<PageProps> = () => {
   return (
     <main>
       <StaticImage src="../images/logo.png" loading="eager" width={400} height={320} alt="Logo"/>
-      <h1>Coming Soon</h1>
-      <span>Our website is under construction</span>
+      <h1>Brevemente</h1>
+      <span>estamos a construir um novo site 🏗️ 🧱</span>
+      <p>os melhores estúdios para estudantes no coração académico da cidade do porto</p>
     </main>
   )
 }
