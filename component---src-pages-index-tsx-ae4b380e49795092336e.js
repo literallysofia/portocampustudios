@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunkportocampustudios=self.webpackChunkportocampustudios||[]).push([[691],{7200:function(e,t,n){n.r(t),n.d(t,{Head:function(){return a}});var u=n(7294);t.default=()=>u.createElement("main",null,u.createElement("h1",null,"Congratulations"));const a=()=>u.createElement("title",null,"Home Page")}}]);
-//# sourceMappingURL=component---src-pages-index-tsx-ae4b380e49795092336e.js.map
