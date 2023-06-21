@@ -6,7 +6,7 @@ import { StaticImage } from "gatsby-plugin-image"
 const IndexPage: React.FC<PageProps> = () => {
   return (
     <main>
-      <StaticImage src="../images/logo.png" loading="eager" width={400} height={320} alt="Logo"/>
+      <StaticImage src="../images/logo.png" loading="eager" width={300} height={250} alt="Logo"/>
       <h1>Brevemente</h1>
       <span>estamos a construir um novo site 🏗️ 🧱</span>
       <p>os melhores estúdios para estudantes no coração académico da cidade do porto</p>
