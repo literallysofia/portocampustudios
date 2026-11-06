@@ -1,0 +1,57 @@
+---
+/**
+ * Map
+ * Click-to-load Google Map. Until the visitor asks for it, a static
+ * card with the address and an "open in Google Maps" link shows, so
+ * no third-party cookies load with the page (no consent banner needed).
+ */
+import Sticker from './Sticker.astro';
+import { siteConfig, mapsUrl, mapsEmbedUrl } from '../config';
+import { t, type Locale } from '../i18n';
+
+interface Props {
+  lang: Locale;
+  class?: string;
+}
+
+const { lang, class: className } = Astro.props;
+const tr = t(lang);
+---
+
+<div class:list={['map', className]} data-map data-src={mapsEmbedUrl}>
+  <div class="map__placeholder">
+    <svg class="map__streets" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <path d="M-20 90 Q120 70 220 120 T420 110" />
+      <path d="M60 -20 Q90 140 40 320" />
+      <path d="M-20 230 Q160 200 260 250 T420 260" />
+      <path d="M300 -20 Q260 120 330 320" />
+      <path d="M140 -20 L190 320" class="map__street--thin" />
+      <path d="M-20 160 L420 175" class="map__street--thin" />
+    </svg>
+    <Sticker icon="pin" tone="green" size="4rem" index={2} />
+    <p class="map__address">{siteConfig.address.street}<br />{siteConfig.address.postcode} {siteConfig.address.city}</p>
+    <div class="map__actions">
+      <button class="button button--light" type="button" data-map-load>{tr('map.load')}</button>
+      <a class="map__link" href={mapsUrl} target="_blank" rel="noopener">{tr('map.open')}</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  function initMaps(): void {
+    document.querySelectorAll<HTMLElement>('[data-map]').forEach((map) => {
+      const button = map.querySelector<HTMLButtonElement>('[data-map-load]');
+      button?.addEventListener('click', () => {
+        const iframe = document.createElement('iframe');
+        iframe.src = map.dataset.src ?? '';
+        iframe.title = 'Google Maps';
+        iframe.loading = 'lazy';
+        iframe.referrerPolicy = 'no-referrer-when-downgrade';
+        map.replaceChildren(iframe);
+        map.classList.add('is-loaded');
+      });
+    });
+  }
+
+  document.addEventListener('astro:page-load', initMaps);
+</script>

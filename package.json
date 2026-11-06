@@ -1,7 +1,9 @@
 {
-  "name": "",
+  "name": "portocampustudios",
   "type": "module",
-  "version": "0.0.1",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Porto Campus Studios — student accommodation in Porto",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
@@ -10,8 +12,10 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/check": "^0.5.10",
-    "astro": "^4.7.1",
-    "typescript": "^5.4.5"
+    "astro": "^7.4.5"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "typescript": "^5.9.3"
   }
 }

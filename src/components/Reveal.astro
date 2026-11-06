@@ -1,0 +1,67 @@
+---
+/**
+ * Reveal Component
+ * Shared scroll-reveal: any element with [data-reveal] fades up
+ * when it enters the viewport, staggered by 70ms.
+ * Included once in the layout; re-runs after view transitions
+ * (on-screen items then skip the fade, see showInView).
+ */
+---
+
+<script>
+  function initReveal(): void {
+    const items = document.querySelectorAll<HTMLElement>('[data-reveal]:not(.is-visible)');
+    if (items.length === 0) return;
+
+    const STAGGER_DELAY = 70;
+    let queued = 0;
+    let resetTimer: number | undefined;
+    const revealed = new WeakSet<Element>();
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting || revealed.has(entry.target)) return;
+          // A [data-reveal-group] (e.g. a swipe strip) reveals together, so a
+          // card peeking in from the side isn't left invisible until swiped
+          const group = entry.target.closest('[data-reveal-group]');
+          const targets = group ? [...group.querySelectorAll<HTMLElement>('[data-reveal]')] : [entry.target as HTMLElement];
+          targets.forEach((el) => {
+            if (revealed.has(el)) return;
+            revealed.add(el);
+            setTimeout(() => el.classList.add('is-visible'), queued * STAGGER_DELAY);
+            queued++;
+            observer.unobserve(el);
+          });
+          window.clearTimeout(resetTimer);
+          resetTimer = window.setTimeout(() => (queued = 0), 200);
+        });
+      },
+      { threshold: 0.15 }
+    );
+
+    items.forEach((item) => observer.observe(item));
+  }
+
+  /**
+   * Arriving from another page: whatever is already on screen shows
+   * straight away and rides in on the page crossfade. Fading it up as
+   * well made Safari play it twice (shown in the crossfade, then
+   * blinking back to faded once the transition ended).
+   */
+  function showInView(): void {
+    const inView = (el: Element) => {
+      const rect = el.getBoundingClientRect();
+      return rect.top < window.innerHeight && rect.bottom > 0;
+    };
+    document.querySelectorAll<HTMLElement>('[data-reveal]:not(.is-visible)').forEach((el) => {
+      if (!inView(el.closest('[data-reveal-group]') ?? el)) return;
+      el.style.transition = 'none';
+      el.classList.add('is-visible');
+      requestAnimationFrame(() => el.style.removeProperty('transition'));
+    });
+  }
+
+  document.addEventListener('astro:after-swap', showInView);
+  document.addEventListener('astro:page-load', initReveal);
+</script>

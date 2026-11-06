@@ -1,0 +1,114 @@
+---
+/**
+ * Base Layout
+ * HTML shell for every page: meta and Open Graph tags, hreflang
+ * alternates, fonts, view transitions and the global stylesheets.
+ *
+ * @prop lang - page locale
+ * @prop title - page title (the site name is appended)
+ * @prop description - meta description
+ * @prop alternates - localized URLs of this page, for hreflang + the language switch
+ * @prop current - route of this page (highlights the nav, hides the mobile book bar on /book)
+ */
+
+import { ClientRouter } from 'astro:transitions';
+import { siteConfig, siteGate } from '../config';
+import { locales, t, type Locale, type RouteKey } from '../i18n';
+import Reveal from '../components/Reveal.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import MobileBookBar from '../components/MobileBookBar.astro';
+import BackToTop from '../components/BackToTop.astro';
+import SiteGate from '../components/SiteGate.astro';
+
+interface Props {
+  lang: Locale;
+  title?: string;
+  description: string;
+  alternates: Record<Locale, string>;
+  current: RouteKey;
+}
+
+const { lang, title, description, alternates, current } = Astro.props;
+const fullTitle = title ? `${title} · ${siteConfig.name}` : siteConfig.name;
+const canonical = new URL(Astro.url.pathname, siteConfig.url).href;
+---
+
+<!doctype html>
+<html lang={lang === 'pt' ? 'pt-PT' : 'en'}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    {siteGate.enabled && <meta name="robots" content="noindex, nofollow" />}
+    {
+      siteGate.enabled && (
+        <script is:inline define:vars={{ gateHash: siteGate.hash }}>
+          // Hide the site behind the WIP gate before first paint, unless this
+          // browser has already unlocked it (see SiteGate.astro)
+          var unlocked = false;
+          try { unlocked = localStorage.getItem('pcs-site-gate') === gateHash; } catch (e) {}
+          if (!unlocked) document.documentElement.classList.add('is-gated');
+        </script>
+      )
+    }
+    <link rel="canonical" href={canonical} />
+    {locales.map((l) => <link rel="alternate" hreflang={l} href={new URL(alternates[l], siteConfig.url).href} />)}
+    <link rel="alternate" hreflang="x-default" href={new URL(alternates.pt, siteConfig.url).href} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteConfig.name} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:locale" content={lang === 'pt' ? 'pt_PT' : 'en_GB'} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#FFFFFF" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Inter:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <ClientRouter />
+  </head>
+  <body id="top">
+    {siteGate.enabled && <SiteGate lang={lang} />}
+    <a class="skip-link button" href="#content">{t(lang)('nav.skip')}</a>
+    <Header lang={lang} alternates={alternates} current={current} />
+    <main id="content">
+      <slot />
+    </main>
+    <Footer lang={lang} alternates={alternates} />
+    {current !== 'book' && <MobileBookBar lang={lang} />}
+    <BackToTop lang={lang} />
+    <Reveal />
+    <script>
+      // Fade photos in once they're decoded instead of painting progressively
+      function initImageFade(): void {
+        document.querySelectorAll<HTMLImageElement>('main img').forEach((img) => {
+          if (img.complete) return;
+          img.dataset.loading = '';
+          const done = () => delete img.dataset.loading;
+          img.addEventListener('load', () => img.decode().catch(() => {}).finally(done), { once: true });
+          img.addEventListener('error', done, { once: true });
+        });
+      }
+      document.addEventListener('astro:page-load', initImageFade);
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  @import '../styles/theme.css';
+  @import '../styles/global.css';
+  @import '../styles/animations.css';
+  @import '../styles/chrome.css';
+  @import '../styles/home.css';
+  @import '../styles/gate.css';
+</style>

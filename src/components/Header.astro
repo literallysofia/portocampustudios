@@ -1,0 +1,132 @@
+---
+/**
+ * Header
+ * Sticky top bar: houses mark, nav links, language switch and the
+ * navy "Book" pill. Below 900px the links collapse into a full-screen
+ * navy menu opened by the hamburger button.
+ *
+ * @prop lang - page locale
+ * @prop alternates - this page's URL in each locale (language switch)
+ * @prop current - route of the current page, highlights its nav link
+ */
+import LogoMark from './LogoMark.astro';
+import LangToggle from './LangToggle.astro';
+import { navItems } from '../lib/nav';
+import { siteConfig } from '../config';
+import { path, t, type Locale, type RouteKey } from '../i18n';
+
+interface Props {
+  lang: Locale;
+  alternates: Record<Locale, string>;
+  current: RouteKey;
+}
+
+const { lang, alternates, current } = Astro.props;
+const tr = t(lang);
+const items = navItems(lang);
+---
+
+<header class="site-header" data-header>
+  <div class="site-header__inner container">
+    <a class="site-header__logo" href={path(lang, 'home')} aria-label={`Porto Campus Studios, ${tr('nav.home')}`}>
+      <LogoMark class="site-header__mark" />
+    </a>
+
+    <nav class="site-nav" aria-label="Main">
+      <ul class="site-nav__list">
+        {
+          items.map((item) => (
+            <li>
+              <a class="site-nav__link" href={item.href} aria-current={item.route === current && current !== 'home' ? 'page' : undefined}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <LangToggle lang={lang} alternates={alternates} />
+      <a class="button site-nav__book" href={path(lang, 'book')} aria-current={current === 'book' ? 'page' : undefined}>
+        {tr('nav.book')}
+      </a>
+    </nav>
+
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" data-menu-toggle>
+      <!-- Three bars that morph into an × while the menu is open -->
+      <span class="menu-toggle__bars" aria-hidden="true"><span></span><span></span><span></span></span>
+      <span class="sr-only">{tr('nav.menu')}</span>
+    </button>
+  </div>
+
+  <div class="mobile-menu" id="mobile-menu" data-mobile-menu>
+    <nav class="mobile-menu__inner container" aria-label="Mobile">
+      <ul class="mobile-menu__list">
+        {
+          items.map((item, i) => (
+            <li class="mobile-menu__item" style={`--i:${i}`}>
+              <a href={item.href}>{item.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="mobile-menu__item mobile-menu__extras" style={`--i:${items.length}`}>
+        <a class="button button--accent mobile-menu__book" href={path(lang, 'book')}>{tr('nav.book')}</a>
+        <div class="mobile-menu__meta">
+          <LangToggle lang={lang} alternates={alternates} dark />
+          <a class="mobile-menu__email" href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>
+        </div>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<script>
+  function initHeader(): void {
+    const header = document.querySelector<HTMLElement>('[data-header]');
+    const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+    const menu = document.querySelector<HTMLElement>('[data-mobile-menu]');
+    if (!header || !toggle || !menu) return;
+
+    const root = document.documentElement;
+    const CLOSE_MS = 380;
+    let closeTimer: number | undefined;
+
+    // Opening: the circle reveal (pure CSS). Closing: a short
+    // [data-menu-closing] phase where the panel fades out with a lift,
+    // then everything resets while invisible, ready for the next open.
+    const setOpen = (open: boolean) => {
+      const isOpen = root.hasAttribute('data-menu-open');
+      if (open === isOpen) return;
+      toggle.setAttribute('aria-expanded', String(open));
+      window.clearTimeout(closeTimer);
+      if (open) {
+        root.removeAttribute('data-menu-closing');
+        root.setAttribute('data-menu-open', '');
+        return;
+      }
+      root.removeAttribute('data-menu-open');
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduceMotion) return;
+      root.setAttribute('data-menu-closing', '');
+      closeTimer = window.setTimeout(() => root.removeAttribute('data-menu-closing'), CLOSE_MS);
+    };
+
+    toggle.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+    // Links inside the menu (incl. same-page anchors) close it; the language
+    // toggle doesn't, so the menu stays open in the other language
+    menu.querySelectorAll('a:not(.lang-toggle__option)').forEach((link) => link.addEventListener('click', () => setOpen(false)));
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') setOpen(false);
+    });
+
+    // Hairline under the header once the page scrolls
+    const onScroll = () => header.toggleAttribute('data-scrolled', window.scrollY > 8);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+  }
+
+  document.addEventListener('astro:page-load', initHeader);
+  document.addEventListener('astro:before-swap', () => {
+    document.documentElement.removeAttribute('data-menu-open');
+    document.documentElement.removeAttribute('data-menu-closing');
+  });
+</script>

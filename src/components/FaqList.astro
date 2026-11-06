@@ -1,0 +1,74 @@
+---
+/**
+ * FaqList
+ * Accordion of questions built on native <details>, so it works and
+ * stays accessible without JavaScript. With JS, opening and closing
+ * glide (height + fade) instead of snapping, and the icon spins.
+ */
+import Icon from './Icon.astro';
+
+interface Props {
+  items: { question: string; answer: string }[];
+}
+
+const { items } = Astro.props;
+---
+
+<div class="faq-list">
+  {
+    items.map((item) => (
+      <details class="faq-item" data-faq-item>
+        <summary>
+          <span>{item.question}</span>
+          <span class="faq-item__icon">
+            <Icon name="plus" size="1.1rem" />
+          </span>
+        </summary>
+        <div class="faq-item__body" data-faq-body>
+          <p>{item.answer}</p>
+        </div>
+      </details>
+    ))
+  }
+</div>
+
+<script>
+  const DURATION = 380;
+  const EASING = 'cubic-bezier(0.2, 0.7, 0.2, 1)';
+
+  function animate(item: HTMLDetailsElement, body: HTMLElement, open: boolean): void {
+    item.dataset.animating = '';
+    item.classList.toggle('is-open', open);
+    if (open) item.open = true;
+
+    const height = body.scrollHeight;
+    const animation = body.animate(
+      open
+        ? [{ height: '0px', opacity: 0 }, { height: `${height}px`, opacity: 1 }]
+        : [{ height: `${height}px`, opacity: 1 }, { height: '0px', opacity: 0 }],
+      { duration: DURATION, easing: EASING }
+    );
+    animation.onfinish = () => {
+      if (!open) item.open = false;
+      delete item.dataset.animating;
+    };
+  }
+
+  function initFaq(): void {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    document.querySelectorAll<HTMLDetailsElement>('[data-faq-item]').forEach((item) => {
+      const summary = item.querySelector('summary');
+      const body = item.querySelector<HTMLElement>('[data-faq-body]');
+      if (!summary || !body || reduceMotion) return;
+      item.classList.add('is-enhanced');
+      item.classList.toggle('is-open', item.open);
+      summary.addEventListener('click', (event) => {
+        event.preventDefault();
+        if (item.dataset.animating !== undefined) return;
+        animate(item, body, !item.open);
+      });
+    });
+  }
+
+  document.addEventListener('astro:page-load', initFaq);
+</script>

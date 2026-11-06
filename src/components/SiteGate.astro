@@ -1,0 +1,91 @@
+---
+/**
+ * SiteGate
+ * "Coming soon" screen with a password field, shown over every page while
+ * `siteGate.enabled` (src/config.ts). An inline script in the layout's
+ * <head> adds .is-gated to <html> before the first paint unless this
+ * browser has already unlocked the site, so the real page never flashes.
+ * The password is checked with PBKDF2 in the browser (Web Crypto) against
+ * the stored hash; the plain password is never stored anywhere.
+ */
+import LogoMark from './LogoMark.astro';
+import { siteGate } from '../config';
+import { t, type Locale } from '../i18n';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const tr = t(lang);
+---
+
+<div class="site-gate" data-site-gate data-salt={siteGate.salt} data-hash={siteGate.hash} data-iterations={siteGate.iterations}>
+  <form class="site-gate__card" data-site-gate-form>
+    <LogoMark class="site-gate__mark" />
+    <h1 class="site-gate__title">{tr('gate.title')}</h1>
+    <p class="site-gate__text">{tr('gate.text')}</p>
+    <label class="sr-only" for="site-gate-password">{tr('gate.label')}</label>
+    <div class="site-gate__field">
+      <input
+        id="site-gate-password"
+        name="password"
+        type="password"
+        autocomplete="current-password"
+        placeholder={tr('gate.label')}
+        required
+      />
+      <button class="button" type="submit">{tr('gate.submit')}</button>
+    </div>
+    <p class="site-gate__error" role="alert" data-site-gate-error hidden>{tr('gate.error')}</p>
+  </form>
+</div>
+
+<script>
+  const KEY = 'pcs-site-gate';
+
+  const fromHex = (hex: string) => new Uint8Array(hex.match(/../g)!.map((b) => parseInt(b, 16)));
+  const toHex = (buffer: ArrayBuffer) => [...new Uint8Array(buffer)].map((b) => b.toString(16).padStart(2, '0')).join('');
+
+  async function derive(password: string, saltHex: string, iterations: number): Promise<string> {
+    const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveBits']);
+    const bits = await crypto.subtle.deriveBits({ name: 'PBKDF2', salt: fromHex(saltHex), iterations, hash: 'SHA-256' }, key, 256);
+    return toHex(bits);
+  }
+
+  function initGate(): void {
+    const gate = document.querySelector<HTMLElement>('[data-site-gate]');
+    const form = document.querySelector<HTMLFormElement>('[data-site-gate-form]');
+    const error = document.querySelector<HTMLElement>('[data-site-gate-error]');
+    if (!gate || !form || !error) return;
+    const { salt = '', hash = '', iterations = '0' } = gate.dataset;
+
+    if (document.documentElement.classList.contains('is-gated')) {
+      form.querySelector('input')?.focus();
+    }
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const input = form.querySelector('input')!;
+      const button = form.querySelector('button')!;
+      button.disabled = true;
+      const result = await derive(input.value, salt, Number(iterations));
+      button.disabled = false;
+      if (result !== hash) {
+        error.hidden = false;
+        input.select();
+        return;
+      }
+      try {
+        localStorage.setItem(KEY, hash);
+      } catch {
+        /* private mode: unlocked for this page only */
+      }
+      document.documentElement.classList.remove('is-gated');
+    });
+
+    form.querySelector('input')?.addEventListener('input', () => (error.hidden = true));
+  }
+
+  document.addEventListener('astro:page-load', initGate);
+</script>

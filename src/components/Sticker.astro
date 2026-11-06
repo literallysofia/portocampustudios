@@ -1,0 +1,44 @@
+---
+/**
+ * Sticker
+ * An Icon sitting on a slightly tilted, wobbly blob, the site's
+ * signature icon treatment. Tone and tilt cycle with `index`, so a
+ * grid of stickers looks hand-placed without any per-item settings.
+ *
+ * @prop icon - Icon name
+ * @prop index - position in a list, drives tone/shape/tilt
+ * @prop tone - force a tone: blue | ink | green
+ * @prop size - sticker size (default 3.5rem)
+ */
+import Icon from './Icon.astro';
+
+type Tone = 'blue' | 'ink' | 'green';
+
+interface Props {
+  icon: string;
+  index?: number;
+  tone?: Tone;
+  size?: string;
+}
+
+const { icon, index = 0, tone, size = '3.5rem' } = Astro.props;
+
+// Mostly blue and navy; green is reserved for the garden
+const cycle: Tone[] = ['blue', 'ink', 'blue', 'ink'];
+const resolvedTone: Tone = tone ?? (icon === 'garden' ? 'green' : cycle[index % cycle.length]);
+const shapes = [
+  '42% 58% 55% 45% / 50% 45% 55% 50%',
+  '55% 45% 40% 60% / 45% 55% 45% 55%',
+  '50% 50% 45% 55% / 60% 40% 60% 40%',
+  '45% 55% 60% 40% / 55% 45% 55% 45%',
+  '58% 42% 50% 50% / 45% 55% 45% 55%',
+];
+const tilts = [-6, 5, -3, 4, -5, 6];
+---
+
+<span
+  class:list={['sticker', `sticker--${resolvedTone}`]}
+  style={`--sticker-size:${size};--sticker-radius:${shapes[index % shapes.length]};--sticker-tilt:${tilts[index % tilts.length]}deg`}
+>
+  <Icon name={icon} size="55%" />
+</span>

@@ -1,0 +1,52 @@
+---
+/**
+ * BackToTop
+ * Floating round "back to top" button for phones. It appears once the
+ * visitor has scrolled past roughly the first screen, but only while the
+ * floating Book card is out of the way (e.g. over the booking band or the
+ * footer), so there's never more than one floating button. Larger screens use the pill in
+ * the footer instead.
+ */
+import Icon from './Icon.astro';
+import { t, type Locale } from '../i18n';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+---
+
+<a class="back-to-top" href="#top" aria-label={t(lang)('footer.top')} data-back-to-top>
+  <Icon name="arrow-up" size="1.2rem" />
+</a>
+
+<script>
+  function initBackToTop(): void {
+    const button = document.querySelector<HTMLElement>('[data-back-to-top]');
+    if (!button) return;
+    const update = () => button.classList.toggle('is-visible', window.scrollY > window.innerHeight * 0.9);
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+    // Scroll up without adding #top to the address bar. While the page
+    // glides up, [data-scrolling-top] keeps the Book card from popping up
+    // over the sections it passes; it's cleared once the scroll arrives.
+    const root = document.documentElement;
+    let fallback: number | undefined;
+    const done = () => {
+      root.removeAttribute('data-scrolling-top');
+      window.clearTimeout(fallback);
+      window.removeEventListener('scrollend', done);
+    };
+    button.addEventListener('click', (event) => {
+      event.preventDefault();
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      root.setAttribute('data-scrolling-top', '');
+      window.addEventListener('scrollend', done, { once: true });
+      fallback = window.setTimeout(done, 2000); // browsers without `scrollend`
+      window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+    });
+  }
+
+  document.addEventListener('astro:page-load', initBackToTop);
+</script>

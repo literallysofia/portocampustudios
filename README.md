@@ -1,47 +1,43 @@
-# Astro Starter Kit: Minimal
+# Porto Campus Studios
+
+Website for [portocampustudios.com](https://portocampustudios.com), student studios and apartments opposite ISEP, on the Asprela university campus in Porto. Built with [Astro](https://astro.build), in Portuguese (`/`) and English (`/en/`).
+
+## Run it locally
 
 ```sh
-npm create astro@latest -- --template minimal
+npm install
+npm run dev      # http://localhost:4321
+npm run build    # type-checks and builds to dist/
+npm run preview  # serves the production build
 ```
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/minimal)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/minimal)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/minimal/devcontainer.json)
+Pushing to `main` deploys to GitHub Pages (`.github/workflows/deploy.yml`).
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Editing the site
 
-## 🚀 Project Structure
+You don't need to touch any code to change the text or photos.
 
-Inside of your Astro project, you'll see the following folders and files:
+| What | Where |
+|---|---|
+| Email, phone/WhatsApp, address, Facebook | `src/config.ts` |
+| Home page text (both languages) | `src/content/home/pt.md`, `en.md` |
+| Rooms: text, features, cover, gallery | `src/content/rooms/{pt,en}/{studio,t0,t4}.md` |
+| Services ("o que está incluído") | `src/content/services/pt.md`, `en.md` |
+| Location, transport, places to see | `src/content/location/pt.md`, `en.md` |
+| FAQ | `src/content/faq/pt.md`, `en.md` |
+| Booking page | `src/content/book/pt.md`, `en.md` |
+| Buttons, menus and other small labels | `src/i18n/index.ts` |
+| URLs (e.g. `/habitacoes/`) | `routeSlugs` in `src/i18n/index.ts` |
+| Colours, fonts, spacing | `src/styles/theme.css` |
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+- **Photos** live in `src/assets/photos/`. Add a file there and reference it from the content file, e.g. `../../../assets/photos/t4/dsc-0985.jpg` (paths are relative to the `.md` file). Every gallery photo needs an `alt` description in both languages.
+- **Content is checked at build time**: a missing field or a broken photo path stops `npm run build` with an error that names the file.
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Work-in-progress gate
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+While the site is being built, production shows a "coming soon" screen with a password and tells search engines not to index it. The dev server never shows it.
 
-Any static assets, like images, can be placed in the `public/` directory.
+- **Change the password:** `node scripts/gate-hash.mjs "new password"` and paste the printed `salt` and `hash` into `siteGate` in `src/config.ts`.
+- **Launch:** set `wip` to `false` in `src/config.ts`.
 
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+GitHub Pages is static hosting, so the gate keeps casual visitors and search engines out but isn't real access control.

@@ -1,0 +1,12 @@
+---
+/**
+ * LogoMark
+ * Just the three houses from the logo, used in the header.
+ * Strokes and type use currentColor, so set `color` on a parent
+ * (ink on light, white on the navy footer). Houses stay logo blue.
+ */
+interface Props { class?: string; title?: string }
+const { class: className, title = 'Porto Campus Studios' } = Astro.props;
+---
+
+<svg class={className} viewBox="1100 540 800 435" role="img" aria-label={title} xmlns="http://www.w3.org/2000/svg"><g><polygon fill="#46BAE9" stroke="currentColor" stroke-width="18" stroke-miterlimit="10" points="1515.3,737.1 1700.9,587.3 1885.3,737.1 1885.3,963.4 1515.3,963.4 "/> <rect x="1657.8" y="843.8" fill="#FFFFFF" stroke="currentColor" stroke-width="18" stroke-miterlimit="10" width="85.7" height="119.6"/> <polygon fill="#46BAE9" stroke="currentColor" stroke-width="18" stroke-miterlimit="10" points="1116.3,737.1 1301.9,587.3 1486.3,737.1 1486.3,963.4 1116.3,963.4 "/> <rect x="1258.8" y="843.8" fill="#FFFFFF" stroke="currentColor" stroke-width="18" stroke-miterlimit="10" width="85.7" height="119.6"/> <polygon fill="#46BAE9" stroke="currentColor" stroke-width="18" stroke-miterlimit="10" points="1301.3,719 1502,557 1701.3,719 1701.3,963.7 1301.3,963.7 "/> <rect x="1455.3" y="834.3" fill="#FFFFFF" stroke="currentColor" stroke-width="18" stroke-miterlimit="10" width="92.7" height="129.3"/> </g></svg>

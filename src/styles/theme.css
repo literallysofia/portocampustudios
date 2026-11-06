@@ -1,0 +1,67 @@
+/* ================================================
+   THEME TOKENS
+   ================================================
+   Brand direction "Big type": white page, navy ink,
+   logo blue as the one accent. Every colour, font,
+   size and timing used by the site lives here.
+   ================================================ */
+
+:root {
+  color-scheme: light;
+
+  /* Fonts */
+  --font-display: 'Bricolage Grotesque', system-ui, sans-serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
+
+  /* Colours */
+  --color-bg: #FFFFFF;
+  --color-surface: #F2F4F5;
+  --color-surface-strong: #E6EAEC;
+  --color-ink: #0E2A3B;
+  --color-text: #0E2A3B;
+  --color-text-muted: #4A6170;
+  --color-border: #DDE3E6;
+  /* Logo blue: big type, fills, chips. Too light for small text on white */
+  --color-accent: #46BAE9;
+  --color-accent-soft: #E3F4FC;
+  /* Logo blue, darkened to pass contrast for small text and links */
+  --color-accent-text: #1B7FAD;
+  /* Garden green (the umbrellas): second accent for fills, chips, icons */
+  --color-green: #A8E05F;
+  --color-green-soft: #EEF8DF;
+  /* Green darkened to pass contrast for small text on white */
+  --color-green-text: #3D7A1A;
+  --color-highlight: #FFD25A;
+  --color-on-ink: #FFFFFF;
+  --color-on-ink-muted: #A9BCC7;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --duration-fast: 0.2s;
+  --duration-normal: 0.4s;
+  --duration-slow: 0.7s;
+
+  /* Spacing */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 2rem;
+  --spacing-lg: 3.5rem;
+  --spacing-xl: clamp(4rem, 3rem + 4vw, 7.5rem);
+  --gutter: clamp(1rem, 4vw, 3.5rem);
+  /* Grows with the window on big screens, like the personal site */
+  --max-width: max(80rem, 86vw);
+  --header-height: 4.5rem;
+
+  /* Radii */
+  --radius-sm: 0.75rem;
+  --radius-card: 1.5rem;
+  --radius-lg: 2rem;
+  --radius-pill: 999px;
+
+  /* Type scale */
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: clamp(1.05rem, 1rem + 0.3vw, 1.25rem);
+  --text-h3: clamp(1.25rem, 1.1rem + 0.6vw, 1.6rem);
+  --text-h2: clamp(2rem, 1.4rem + 2.6vw, 3.75rem);
+}

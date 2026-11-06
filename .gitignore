@@ -22,3 +22,9 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# Reference assets/content for building the site — never commit
+Porto Campus Studios/
+
+# Local tooling
+.claude/

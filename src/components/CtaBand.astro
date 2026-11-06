@@ -1,0 +1,48 @@
+---
+/**
+ * CtaBand
+ * The "book now" finale shown at the end of content pages: navy card
+ * with the booking buttons, a blob-cropped photo of the homes and a
+ * few floating stickers.
+ */
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import BookingButtons from './BookingButtons.astro';
+import Sticker from './Sticker.astro';
+import { siteConfig } from '../config';
+import type { Locale } from '../i18n';
+
+interface Props {
+  lang: Locale;
+  title: string;
+  text: string;
+  image: ImageMetadata;
+  imageAlt: string;
+}
+
+const { lang, title, text, image, imageAlt } = Astro.props;
+---
+
+<section class="cta-band container" data-reveal>
+  <div class="cta-band__inner">
+    <svg class="cta-band__blob" viewBox="0 0 400 300" aria-hidden="true">
+      <path d="M52 58C102 6 250 -4 330 36s82 150 20 208-226 52-290 10S2 110 52 58z" />
+    </svg>
+    <div class="cta-band__copy">
+      <h2 class="cta-band__title">{title}</h2>
+      <p class="cta-band__text">{text}</p>
+      <div class="cta-band__actions" data-book-cta>
+        <BookingButtons lang={lang} light />
+        <a class="cta-band__email" href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>
+      </div>
+    </div>
+    <div class="cta-band__visual">
+      <div class="cta-band__photo">
+        <Image src={image} alt={imageAlt} widths={[480, 800, 1100]} sizes="(max-width: 768px) 80vw, 34vw" />
+      </div>
+      <span class="cta-band__sticker cta-band__sticker--1"><Sticker icon="mail" tone="blue" size="4.25rem" index={0} /></span>
+      <span class="cta-band__sticker cta-band__sticker--2"><Sticker icon="whatsapp" tone="green" size="3.75rem" index={1} /></span>
+      <span class="cta-band__sticker cta-band__sticker--3"><Sticker icon="calendar" tone="blue" size="3.25rem" index={3} /></span>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,35 @@
+---
+/**
+ * Router
+ * Generates every page for every locale from the localized slugs in
+ * src/i18n (so PT URLs like /habitacoes/ come from data, not from
+ * file names). Each route renders a view from src/views.
+ */
+import Layout from '../layouts/Layout.astro';
+import HomeView from '../views/HomeView.astro';
+import { getLocaleEntry } from '../lib/content';
+import { locales, path, type Locale, type RouteKey } from '../i18n';
+
+export async function getStaticPaths() {
+  const toParam = (url: string) => url.replace(/^\/|\/$/g, '') || undefined;
+  const alternatesFor = (route: RouteKey, slugs?: Record<Locale, string>) =>
+    Object.fromEntries(locales.map((l) => [l, path(l, route, slugs?.[l])])) as Record<Locale, string>;
+
+  const pages: { lang: Locale; route: RouteKey; alternates: Record<Locale, string> }[] = [];
+  for (const lang of locales) {
+    pages.push({ lang, route: 'home', alternates: alternatesFor('home') });
+  }
+
+  return pages.map((page) => ({
+    params: { path: toParam(page.alternates[page.lang]) },
+    props: page,
+  }));
+}
+
+const { lang, route, alternates } = Astro.props;
+const { data: home } = await getLocaleEntry('home', lang);
+---
+
+<Layout lang={lang} description={home.meta.description} alternates={alternates} current={route}>
+  {route === 'home' && <HomeView lang={lang} />}
+</Layout>

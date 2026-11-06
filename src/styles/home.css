@@ -1,0 +1,859 @@
+/* ================================================
+   HOME
+   ================================================
+   Hero, intro, rooms, services, location teaser,
+   city, FAQ teaser and the booking band. Shared
+   blocks (room card, map, FAQ list, CTA band) are
+   here too, since the other pages reuse them.
+   ================================================ */
+
+/* ================================================
+   HERO
+   ================================================ */
+
+.hero {
+  padding-top: clamp(1rem, 3vw, 2.5rem);
+}
+
+/* The hero fills exactly the first screen on every device: title and
+   intro row take what they need, the photo takes the rest, so the whole
+   photo (and its chips) is in view and nothing below peeks in. */
+.hero {
+  display: flex;
+  flex-direction: column;
+  height: calc(100svh - var(--header-height));
+  min-height: 34rem;
+  padding-bottom: clamp(1rem, 2vw, 1.75rem);
+}
+
+/* flex-basis 0 + an absolutely placed image: the box takes exactly the
+   leftover height. With `auto`, a cached image (e.g. after switching
+   language) used its natural height and pushed the hero past the fold. */
+.hero__media {
+  flex: 1 1 0;
+  min-height: 16rem;
+}
+
+.hero__media img {
+  position: absolute;
+  inset: 0;
+}
+
+/* The title is sized from the container width so it stays on one
+   line on tablets and up (the text is ~9.2em wide in Bricolage) */
+.hero__title-wrap {
+  container-type: inline-size;
+}
+
+.hero__title {
+  font-size: clamp(3rem, 10.6cqi, 9.5rem);
+  line-height: 0.92;
+  letter-spacing: -0.045em;
+}
+
+.hero__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.25rem var(--spacing-md);
+  margin-block: clamp(1.25rem, 2.5vw, 2rem);
+}
+
+/* Wide enough for the PT and EN sentence to sit on two lines; when the
+   buttons don't fit beside it, they wrap below instead of squeezing it */
+.hero__subtitle {
+  /* A width, not a flex-basis: on phones the row stacks into a column,
+     where a basis would turn into a height */
+  flex: 0 1 auto;
+  width: min(100%, 37rem);
+  min-width: min(100%, 34rem);
+  font-size: var(--text-lg);
+  color: var(--color-text-muted);
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.hero__media {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  width: 100%;
+  background: var(--color-surface);
+}
+
+.hero__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 60%;
+}
+
+.hero__chips {
+  position: absolute;
+  left: clamp(0.75rem, 2vw, 1.5rem);
+  bottom: clamp(0.75rem, 2vw, 1.5rem);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chip--green {
+  background: var(--color-green);
+}
+
+.chip--green::before {
+  background: var(--color-ink);
+}
+
+/* ================================================
+   INTRO
+   ================================================ */
+
+.intro {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: var(--spacing-lg);
+  align-items: center;
+}
+
+.intro__text {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.4rem, 1rem + 1.4vw, 2.25rem);
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+}
+
+.intro__facts {
+  display: grid;
+  gap: var(--spacing-sm);
+  margin: 0;
+}
+
+.intro__fact {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.intro__value {
+  min-width: 5.5ch;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2rem, 1.5rem + 1.5vw, 3rem);
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--color-accent);
+}
+
+.intro__label {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+/* Photo mosaic of the complex: one big shot + two stacked */
+.intro__photos {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: clamp(0.75rem, 1.5vw, 1.25rem);
+  aspect-ratio: 16 / 8;
+  margin: 0;
+}
+
+.intro__photo {
+  margin: 0;
+  overflow: hidden;
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+}
+
+.intro__photo--1 {
+  grid-row: 1 / -1;
+}
+
+.intro__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ================================================
+   ROOMS
+   ================================================ */
+
+.rooms {
+  padding-top: 0;
+}
+
+.rooms__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1rem, 2vw, 1.75rem);
+}
+
+.room-card {
+  display: block;
+  text-decoration: none;
+  border-radius: var(--radius-card);
+}
+
+.room-card__media {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  background: var(--color-surface);
+}
+
+.room-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--duration-slow) var(--ease-out);
+}
+
+.room-card:hover .room-card__media img {
+  transform: scale(1.05);
+}
+
+.room-card__badge {
+  position: absolute;
+  top: 0.9rem;
+  left: 0.9rem;
+  padding: 0.3rem 0.8rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-bg);
+  font-size: var(--text-sm);
+  font-weight: 500;
+}
+
+.room-card__body {
+  padding: 1rem 0.25rem 0;
+}
+
+.room-card__title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: var(--text-h3);
+}
+
+.room-card__arrow {
+  transition: transform var(--duration-normal) var(--ease-out);
+}
+
+.room-card:hover .room-card__arrow {
+  transform: translateX(0.35rem);
+}
+
+.room-card__text {
+  margin-top: 0.4rem;
+  color: var(--color-text-muted);
+}
+
+/* ================================================
+   SERVICES
+   ================================================ */
+
+.services {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  margin-inline: clamp(0.5rem, 1.5vw, 1.5rem);
+}
+
+.services__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(0.75rem, 1.5vw, 1.25rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.service {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  padding: 1.25rem;
+  border-radius: var(--radius-card);
+  background: var(--color-bg);
+}
+
+.service__title {
+  font-size: 1.15rem;
+}
+
+.service__text {
+  margin-top: 0.2rem;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+/* ================================================
+   LOCATION TEASER
+   ================================================ */
+
+.location-teaser {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: var(--spacing-lg);
+  align-items: stretch;
+}
+
+.location-teaser .section-head {
+  margin-bottom: var(--spacing-md);
+}
+
+.transport-list {
+  display: grid;
+  gap: 1.25rem;
+  margin: 0 0 var(--spacing-md);
+  padding: 0;
+  list-style: none;
+}
+
+.transport-list__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.transport-list__title {
+  font-size: 1.1rem;
+}
+
+.transport-list__text {
+  margin-top: 0.15rem;
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+/* ================================================
+   MAP
+   ================================================ */
+
+.map {
+  position: relative;
+  min-height: 22rem;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--color-accent-soft);
+}
+
+.map__placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: var(--spacing-md);
+  text-align: center;
+}
+
+.map__streets {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.map__streets path {
+  fill: none;
+  stroke: #FFFFFF;
+  stroke-width: 14;
+  stroke-linecap: round;
+}
+
+.map__streets .map__street--thin {
+  stroke-width: 6;
+}
+
+.map__placeholder > :not(svg) {
+  position: relative;
+}
+
+.map__address {
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.map__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.map__link {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-accent-text);
+}
+
+.map iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* ================================================
+   CITY
+   ================================================ */
+
+.city__banner {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  aspect-ratio: 16 / 7;
+}
+
+.city__banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.city__banner::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgb(14 42 59 / 0.65), transparent 55%);
+}
+
+.city__banner-copy {
+  position: absolute;
+  left: clamp(1.25rem, 3vw, 2.5rem);
+  bottom: clamp(1.25rem, 3vw, 2.5rem);
+  z-index: 1;
+  color: var(--color-on-ink);
+}
+
+.city__banner-copy .eyebrow {
+  color: var(--color-on-ink);
+  margin-bottom: 0.5rem;
+}
+
+.city__banner-copy h2 {
+  font-size: clamp(2.5rem, 1rem + 6vw, 6.5rem);
+  letter-spacing: -0.04em;
+}
+
+.city__intro {
+  max-width: 44rem;
+  margin-block: var(--spacing-md);
+  font-size: var(--text-lg);
+  color: var(--color-text-muted);
+}
+
+.city__places {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.city__place {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.1rem;
+  border-radius: var(--radius-pill);
+  box-shadow: inset 0 0 0 1.5px var(--color-border);
+  font-weight: 500;
+  text-decoration: none;
+  transition: background-color var(--duration-fast) ease, box-shadow var(--duration-fast) ease;
+}
+
+.city__place:hover {
+  background: var(--color-accent-soft);
+  box-shadow: inset 0 0 0 1.5px var(--color-accent);
+}
+
+.city__place--more {
+  background: var(--color-ink);
+  color: var(--color-on-ink);
+  box-shadow: none;
+}
+
+.city__place--more:hover {
+  background: var(--color-ink);
+  box-shadow: none;
+}
+
+/* ================================================
+   FAQ
+   ================================================ */
+
+.faq-teaser {
+  display: grid;
+  /* The heading column is never narrower than its longest word
+     ("perguntares"), so it can't run into the questions */
+  grid-template-columns: minmax(min-content, 0.75fr) minmax(0, 2.25fr);
+  gap: clamp(2.5rem, 5vw, 6rem);
+  align-items: start;
+}
+
+.text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 500;
+  color: var(--color-accent-text);
+  text-decoration: none;
+}
+
+.text-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.faq-list {
+  border-top: 1px solid var(--color-border);
+}
+
+.faq-item {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.faq-item summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.15rem 0;
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  list-style: none;
+}
+
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-item__icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: var(--color-surface);
+  transition: transform var(--duration-normal) var(--ease-out), background-color var(--duration-fast);
+}
+
+/* Hover tint only for real pointers; on touch it would stick after a tap */
+@media (hover: hover) {
+  .faq-item summary:hover .faq-item__icon {
+    background: var(--color-accent-soft);
+  }
+}
+
+/* Without JS the native [open] drives the icon; with JS, .is-open
+   flips at the start of the animation so the icon turns in sync */
+.faq-item:not(.is-enhanced)[open] .faq-item__icon,
+.faq-item.is-open .faq-item__icon {
+  transform: rotate(135deg);
+  background: var(--color-accent);
+}
+
+.faq-item__body {
+  overflow: hidden;
+}
+
+.faq-item__body p {
+  /* Wide, but stops short of the icon and at a comfortable line length */
+  max-width: min(90ch, calc(100% - 3.5rem));
+  padding-bottom: 1.25rem;
+  color: var(--color-text-muted);
+}
+
+/* ================================================
+   CTA BAND
+   ================================================ */
+
+.cta-band {
+  padding-bottom: var(--spacing-xl);
+}
+
+.cta-band__inner {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  align-items: center;
+  gap: var(--spacing-lg);
+  padding: clamp(2rem, 5vw, 4.5rem);
+  border-radius: var(--radius-lg);
+  background: var(--color-ink);
+  color: var(--color-on-ink);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.cta-band__blob {
+  position: absolute;
+  right: -8%;
+  bottom: -30%;
+  width: 55%;
+  z-index: -1;
+  fill: #16384C;
+}
+
+.cta-band__title {
+  font-size: clamp(2.5rem, 1.5rem + 3.5vw, 5rem);
+  letter-spacing: -0.04em;
+}
+
+.cta-band__text {
+  max-width: 30rem;
+  margin: 1rem 0 var(--spacing-md);
+  font-size: var(--text-lg);
+  color: var(--color-on-ink-muted);
+}
+
+/* Buttons + email as one group, the email centred under the buttons */
+.cta-band__actions {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 100%;
+}
+
+.cta-band__email {
+  display: inline-block;
+  margin-top: 1.25rem;
+  font-size: var(--text-sm);
+  color: var(--color-on-ink-muted);
+  text-underline-offset: 4px;
+}
+
+.cta-band__email:hover {
+  color: var(--color-on-ink);
+}
+
+.cta-band__visual {
+  position: relative;
+  justify-self: center;
+  width: min(100%, 30rem);
+}
+
+.cta-band__photo {
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 58% 42% 50% 50% / 45% 55% 45% 55%;
+  transform: rotate(3deg);
+}
+
+.cta-band__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: rotate(-3deg) scale(1.1);
+}
+
+@keyframes float {
+  50% {
+    translate: 0 -0.6rem;
+  }
+}
+
+.cta-band__sticker {
+  position: absolute;
+  animation: float 5s ease-in-out infinite;
+}
+
+.cta-band__sticker--1 {
+  top: 4%;
+  left: -6%;
+}
+
+.cta-band__sticker--2 {
+  bottom: 10%;
+  left: -2%;
+  animation-delay: -1.6s;
+}
+
+.cta-band__sticker--3 {
+  top: 14%;
+  right: -4%;
+  animation-delay: -3.2s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cta-band__sticker {
+    animation: none;
+  }
+}
+
+.booking-buttons {
+  display: flex;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+/* Always side by side: they share the row equally on narrow screens */
+@media (max-width: 768px) {
+  .cta-band__actions {
+    width: 100%;
+  }
+
+  .booking-buttons {
+    width: 100%;
+    gap: 0.5rem;
+  }
+
+  .booking-buttons .button {
+    flex: 1 1 0;
+    min-width: 0;
+    padding-inline: 0.75rem;
+  }
+
+  .cta-band__inner {
+    padding: 2rem 1.5rem;
+  }
+}
+
+/* ================================================
+   RESPONSIVE
+   ================================================ */
+
+@media (max-width: 1100px) {
+  .services__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* Two columns: a lone last card (odd count) spans the full width */
+  .service:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+
+  .location-teaser {
+    grid-template-columns: 1fr;
+  }
+
+  .faq-teaser {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+
+  .faq-teaser__head {
+    margin-bottom: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero__title {
+    font-size: clamp(3rem, 17cqi, 5.5rem);
+  }
+
+  .hero__row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* Smaller chips at the top on phones, so they cover less photo */
+  .hero__chips {
+    top: 0.6rem;
+    left: 0.6rem;
+    right: 0.6rem;
+    bottom: auto;
+    gap: 0.35rem;
+  }
+
+  .hero__chips .chip {
+    padding: 0.3rem 0.65rem;
+    font-size: 0.75rem;
+  }
+
+  .hero__media {
+    border-radius: var(--radius-card);
+  }
+
+  .intro {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+    /* Sits right under the hero photo on phones; the full section gap
+       left a big empty band there */
+    padding-top: var(--spacing-md);
+  }
+
+  .rooms__grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Two compact columns: sticker on top, text below */
+  .services__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .service {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+
+  .service__title {
+    font-size: 1rem;
+  }
+
+  /* The full-width last card goes back to a row (icon beside the text) */
+  .service:last-child:nth-child(odd) {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .intro__fact {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .city__banner {
+    aspect-ratio: 4 / 5;
+  }
+
+  .cta-band__inner {
+    grid-template-columns: 1fr;
+  }
+
+  .cta-band__visual {
+    width: min(80%, 20rem);
+  }
+
+  .intro__photos {
+    aspect-ratio: 4 / 5;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1.4fr 1fr;
+  }
+
+  .intro__photo--1 {
+    grid-row: auto;
+    grid-column: 1 / -1;
+  }
+}
+
+/* Consecutive plain sections share one gap instead of stacking two */
+.city,
+.faq-teaser {
+  padding-top: 0;
+}

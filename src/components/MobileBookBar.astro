@@ -1,0 +1,55 @@
+---
+/**
+ * MobileBookBar
+ * A navy "Book" pill pinned to the bottom of the screen on phones,
+ * so booking is always one tap away. Hidden on larger screens and
+ * on the booking page itself (the layout leaves it out there).
+ * It also steps aside while any [data-book-cta] element (e.g. the
+ * hero buttons or the booking band) is on screen, so there's never
+ * a second "Book" button right next to the first one.
+ */
+import Icon from './Icon.astro';
+import Sticker from './Sticker.astro';
+import { path, t, type Locale } from '../i18n';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const tr = t(lang);
+---
+
+<!-- Starts hidden so it never flashes in and out on load; the script reveals it -->
+<a class="mobile-book-bar is-hidden" href={path(lang, 'book')} data-mobile-book-bar>
+  <Sticker icon="calendar" tone="blue" size="2.75rem" index={0} />
+  <span class="mobile-book-bar__text">
+    <span class="mobile-book-bar__title">{tr('nav.book')}</span>
+    <span class="mobile-book-bar__subtitle">{tr('bar.subtitle')}</span>
+  </span>
+  <span class="mobile-book-bar__arrow"><Icon name="arrow" size="1.2rem" /></span>
+</a>
+
+<script>
+  let observer: IntersectionObserver | undefined;
+
+  function initMobileBookBar(): void {
+    observer?.disconnect();
+    const bar = document.querySelector<HTMLElement>('[data-mobile-book-bar]');
+    const ctas = document.querySelectorAll('[data-book-cta]');
+    if (!bar) return;
+    if (ctas.length === 0) {
+      bar.classList.remove('is-hidden');
+      return;
+    }
+
+    const visible = new Set<Element>();
+    observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => (entry.isIntersecting ? visible.add(entry.target) : visible.delete(entry.target)));
+      bar.classList.toggle('is-hidden', visible.size > 0);
+    });
+    ctas.forEach((cta) => observer!.observe(cta));
+  }
+
+  document.addEventListener('astro:page-load', initMobileBookBar);
+</script>

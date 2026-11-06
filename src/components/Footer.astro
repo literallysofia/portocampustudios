@@ -1,0 +1,65 @@
+---
+/**
+ * Footer
+ * Navy footer with the full logo, address, contacts and site links.
+ * All contact details come from src/config.ts.
+ */
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import LangToggle from './LangToggle.astro';
+import { siteConfig, mapsUrl } from '../config';
+import { navItems } from '../lib/nav';
+import { path, t, type Locale } from '../i18n';
+
+interface Props {
+  lang: Locale;
+  alternates: Record<Locale, string>;
+}
+
+const { lang, alternates } = Astro.props;
+const tr = t(lang);
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer" data-book-cta>
+  <div class="site-footer__inner container">
+    <div class="site-footer__brand">
+      <Logo class="site-footer__logo" />
+      <p class="site-footer__tagline">{tr('footer.tagline')}</p>
+      <a class="site-footer__address" href={mapsUrl} target="_blank" rel="noopener">
+        {siteConfig.address.street}<br />
+        {siteConfig.address.postcode} {siteConfig.address.city}
+      </a>
+    </div>
+
+    <div class="site-footer__col">
+      <h2 class="site-footer__title">{tr('footer.contacts')}</h2>
+      <ul>
+        <li><a href={`mailto:${siteConfig.email}`}><Icon name="mail" size="1.1rem" />{siteConfig.email}</a></li>
+        {siteConfig.phone && <li><a href={`tel:${siteConfig.phone}`}><Icon name="phone" size="1.1rem" />{siteConfig.phone}</a></li>}
+        <li><a href={siteConfig.facebook} target="_blank" rel="noopener"><Icon name="facebook" size="1.1rem" />Facebook</a></li>
+      </ul>
+    </div>
+
+    <div class="site-footer__col">
+      <h2 class="site-footer__title">{tr('footer.explore')}</h2>
+      <ul class="site-footer__links">
+        {navItems(lang).map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+        <li><a href={path(lang, 'book')}>{tr('nav.book')}</a></li>
+      </ul>
+      <div class="site-footer__lang"><LangToggle lang={lang} alternates={alternates} dark /></div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="site-footer__legal">
+      <p>© {year} {siteConfig.name}. {tr('footer.rights')}</p>
+      <a class="site-footer__top" href="#top">
+        {tr('footer.top')}
+        <span class="site-footer__top-icon"><Icon name="arrow-up" size="0.9rem" /></span>
+      </a>
+    </div>
+  </div>
+  <div class="site-footer__wordmark-wrap" aria-hidden="true">
+    <p class="site-footer__wordmark">Porto Campus <span>Studios</span></p>
+  </div>
+</footer>

@@ -1,0 +1,115 @@
+---
+/**
+ * LangToggle
+ * Segmented PT | EN pill. The current language is filled; the other
+ * links to this same page in that language.
+ *
+ * @prop lang - current locale
+ * @prop alternates - this page's URL in each locale
+ * @prop dark - variant for navy backgrounds (mobile menu, footer)
+ */
+import { locales, t, type Locale } from '../i18n';
+
+interface Props {
+  lang: Locale;
+  alternates: Record<Locale, string>;
+  dark?: boolean;
+}
+
+const { lang, alternates, dark = false } = Astro.props;
+/** Language names are endonyms, the same in every locale */
+const labels: Record<Locale, { short: string; name: string }> = {
+  pt: { short: 'PT', name: 'Português' },
+  en: { short: 'EN', name: 'English' },
+};
+---
+
+<nav class:list={['lang-toggle', dark && 'lang-toggle--dark']} aria-label={t(lang)('lang.label')}>
+  {
+    locales.map((l) => (
+      <a
+        class="lang-toggle__option"
+        href={alternates[l]}
+        hreflang={l}
+        lang={l}
+        aria-current={l === lang ? 'true' : undefined}
+        aria-label={labels[l].name}
+      >
+        {labels[l].short}
+      </a>
+    ))
+  }
+</nav>
+
+<script>
+  /**
+   * Switching language keeps the visitor where they are: before leaving we
+   * note which top-level block of <main> is at the top of the screen and how
+   * far into it they've scrolled (as a fraction, since the two languages'
+   * texts differ in length), then restore that spot on the new page right
+   * after the swap, before it paints. The swap uses a short, soft crossfade
+   * and skips the hero entrance, so it feels like the words change in place.
+   * If the mobile menu was open, it stays open on the new page.
+   */
+  interface Spot {
+    index: number;
+    progress: number;
+  }
+
+  let pending: Spot | null = null;
+  let menuWasOpen = false;
+
+  function blocks(): HTMLElement[] {
+    return [...document.querySelectorAll<HTMLElement>('main > *')];
+  }
+
+  function headerOffset(): number {
+    return document.querySelector('.site-header')?.getBoundingClientRect().height ?? 0;
+  }
+
+  function currentSpot(): Spot {
+    const line = headerOffset();
+    const list = blocks();
+    const index = Math.max(0, list.findIndex((el) => el.getBoundingClientRect().bottom > line));
+    const rect = list[index]?.getBoundingClientRect();
+    const progress = rect && rect.height > 0 ? Math.min(1, Math.max(0, (line - rect.top) / rect.height)) : 0;
+    return { index, progress };
+  }
+
+  document.addEventListener('click', (event) => {
+    const link = (event.target as Element | null)?.closest<HTMLAnchorElement>('.lang-toggle__option');
+    if (!link || link.getAttribute('aria-current')) return;
+    pending = window.scrollY > 0 ? currentSpot() : null;
+    menuWasOpen = document.documentElement.hasAttribute('data-menu-open');
+    document.documentElement.setAttribute('data-lang-switch', '');
+  });
+
+  document.addEventListener('astro:before-swap', (event) => {
+    if (!document.documentElement.hasAttribute('data-lang-switch')) return;
+    // Carry the flag over so the new page skips its entrance animations
+    const next = event.newDocument;
+    next.documentElement.setAttribute('data-lang-switch', '');
+    next.documentElement.setAttribute('data-lang-swapping', '');
+    // Switching from the mobile menu: the new page opens with it already open
+    if (menuWasOpen) {
+      next.documentElement.setAttribute('data-menu-open', '');
+      next.querySelector('[data-menu-toggle]')?.setAttribute('aria-expanded', 'true');
+    }
+  });
+
+  document.addEventListener('astro:page-load', () => {
+    // Blocks already on screen have been shown; later ones fade in as usual
+    requestAnimationFrame(() => document.documentElement.removeAttribute('data-lang-swapping'));
+  });
+
+  document.addEventListener('astro:after-swap', () => {
+    if (!pending) return;
+    const target = blocks()[pending.index];
+    if (target) {
+      const rect = target.getBoundingClientRect();
+      const top = window.scrollY + rect.top + rect.height * pending.progress - headerOffset();
+      window.scrollTo({ top, behavior: 'instant' });
+    }
+    pending = null;
+  });
+</script>

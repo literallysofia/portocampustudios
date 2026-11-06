@@ -1,0 +1,101 @@
+/* ================================================
+   WIP GATE
+   ================================================
+   "Coming soon" + password screen (SiteGate.astro).
+   While <html> has .is-gated, only the gate shows.
+   ================================================ */
+
+.site-gate {
+  display: none;
+}
+
+:root.is-gated {
+  overflow: hidden;
+}
+
+:root.is-gated body > :not(.site-gate) {
+  display: none !important;
+}
+
+:root.is-gated .site-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--gutter);
+  background: var(--color-ink);
+  color: var(--color-on-ink);
+}
+
+.site-gate__card {
+  display: grid;
+  justify-items: start;
+  gap: 1.25rem;
+  width: 100%;
+  max-width: 30rem;
+}
+
+.site-gate__mark {
+  width: 4.5rem;
+  color: var(--color-on-ink);
+}
+
+.site-gate__title {
+  font-size: clamp(3rem, 2rem + 6vw, 5.5rem);
+  letter-spacing: -0.045em;
+}
+
+.site-gate__text {
+  font-size: var(--text-lg);
+  color: var(--color-on-ink-muted);
+}
+
+.site-gate__field {
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.site-gate__field input {
+  flex: 1;
+  min-width: 0;
+  min-height: 3rem;
+  padding: 0 1.25rem;
+  border: 1.5px solid rgb(255 255 255 / 0.2);
+  border-radius: var(--radius-pill);
+  background: rgb(255 255 255 / 0.06);
+  color: var(--color-on-ink);
+  font: inherit;
+}
+
+.site-gate__field input::placeholder {
+  color: var(--color-on-ink-muted);
+}
+
+.site-gate__field input:focus-visible {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.site-gate__field .button {
+  background: var(--color-accent);
+  color: var(--color-ink);
+}
+
+.site-gate__error {
+  color: #FFB4A9;
+  font-size: var(--text-sm);
+}
+
+/* Phones: password field and button each on their own full-width row */
+@media (max-width: 768px) {
+  .site-gate__field {
+    flex-direction: column;
+  }
+
+  .site-gate__field .button {
+    width: 100%;
+  }
+}

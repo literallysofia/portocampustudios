@@ -1,0 +1,36 @@
+---
+/**
+ * RoomCard
+ * Photo card for a room type, linking to its detail page.
+ *
+ * @prop room - a rooms collection entry (from getRooms)
+ * @prop href - detail page URL
+ */
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import type { getRooms } from '../lib/content';
+
+interface Props {
+  room: Awaited<ReturnType<typeof getRooms>>[number];
+  href: string;
+}
+
+const { room, href } = Astro.props;
+const { name, badge, summary, cover, gallery } = room.data;
+// Usually the cover is one of the gallery photos, so its alt is reused
+const coverAlt = room.data.coverAlt ?? gallery.find((photo) => photo.src.src === cover.src)?.alt ?? name;
+---
+
+<a class="room-card" href={href} data-reveal>
+  <div class="room-card__media">
+    <Image src={cover} alt={coverAlt} widths={[400, 700, 1000]} sizes="(max-width: 768px) 92vw, 30vw" />
+    {badge && <span class="room-card__badge">{badge}</span>}
+  </div>
+  <div class="room-card__body">
+    <h3 class="room-card__title">
+      {name}
+      <Icon name="arrow" size="1.1em" class="room-card__arrow" />
+    </h3>
+    <p class="room-card__text">{summary}</p>
+  </div>
+</a>
