@@ -1,0 +1,346 @@
+/* ================================================
+   LOCATION PAGE
+   ================================================
+   Two halves: "getting here" on white (hero,
+   map + transport, campus), then "discover Porto"
+   on a grey band like Services (spots grid). Shared pieces like
+   .map, .text-link and .faq-list live in home.css.
+   ================================================ */
+
+/* ================================================
+   HERO
+   ================================================ */
+
+.location-hero {
+  display: grid;
+  gap: var(--spacing-md);
+  padding-top: var(--spacing-lg);
+}
+
+.location-hero__head {
+  display: grid;
+  gap: var(--spacing-sm);
+  /* Ends exactly where the second fact card ends (2 of 3 columns + 1 gap) */
+  width: calc((100% - 2 * var(--spacing-sm)) * 2 / 3 + var(--spacing-sm));
+}
+
+.location-hero__title {
+  font-size: clamp(2.75rem, 1.4rem + 5.2vw, 6rem);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+}
+
+.location-hero__text {
+  font-size: var(--text-lg);
+  color: var(--color-text-muted);
+}
+
+.location-facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--spacing-sm);
+  margin: 0;
+}
+
+.location-facts__item {
+  display: grid;
+  gap: 0.35rem;
+  padding: clamp(1rem, 0.6rem + 1.2vw, 1.75rem);
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+}
+
+.location-facts__value {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 1.1rem + 2.4vw, 3.25rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.location-facts__label {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.location-facts__item--green {
+  background: var(--color-green-soft);
+}
+
+.location-facts__item--green .location-facts__value,
+.location-facts__item--green .location-facts__label {
+  color: var(--color-green-text);
+}
+
+/* ================================================
+   GETTING HERE: map + transport
+   ================================================ */
+
+.getting-here {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: var(--spacing-md);
+  align-items: stretch;
+  padding-top: var(--spacing-lg);
+}
+
+/* The map stretches to the full height of the transport cards */
+.getting-here__map {
+  min-height: 0;
+}
+
+.transport-cards {
+  display: grid;
+  gap: var(--spacing-sm);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.transport-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.25rem;
+  border-radius: var(--radius-card);
+  box-shadow: inset 0 0 0 1.5px var(--color-border);
+}
+
+.transport-card__body {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.transport-card__title {
+  font-size: 1.2rem;
+}
+
+.transport-card__text {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.transport-card__lines {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.4rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.line-chip {
+  padding: 0.2rem 0.65rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  font-size: 0.8rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.transport-card__link {
+  margin-top: 0.4rem;
+  font-size: var(--text-sm);
+}
+
+/* ================================================
+   CAMPUS: next door + all of higher education
+   ================================================ */
+
+.campus {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+  gap: var(--spacing-lg);
+  align-items: start;
+}
+
+.campus__title {
+  margin-bottom: var(--spacing-sm);
+  font-size: clamp(1.75rem, 1.3rem + 1.4vw, 2.5rem);
+}
+
+.campus__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.campus__chip {
+  padding: 0.55rem 1rem;
+  border-radius: var(--radius-pill);
+  box-shadow: inset 0 0 0 1.5px var(--color-border);
+  font-size: var(--text-sm);
+  font-weight: 500;
+}
+
+.campus__chip--green {
+  background: var(--color-green-soft);
+  box-shadow: inset 0 0 0 1.5px var(--color-green);
+  color: var(--color-green-text);
+}
+
+.faq-item__list {
+  columns: 2;
+  column-gap: var(--spacing-md);
+  max-width: calc(100% - 3.5rem);
+  margin: 0;
+  padding: 0 0 1.25rem;
+  list-style: none;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.faq-item__list li {
+  break-inside: avoid;
+  padding-block: 0.2rem;
+}
+
+/* ================================================
+   DISCOVER PORTO: grey band + spots grid
+   ================================================ */
+
+/* An inset rounded band, the same as Services on Home */
+.discover {
+  margin-inline: clamp(0.5rem, 1.5vw, 1.5rem);
+  padding-block: var(--spacing-xl);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+}
+
+.places-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--spacing-md) var(--spacing-sm);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.place-card__media {
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--color-bg);
+  outline: 3px solid transparent;
+  outline-offset: 4px;
+}
+
+.place-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.place-card__name {
+  margin-top: 0.85rem;
+  font-size: 1.15rem;
+}
+
+.place-card__text {
+  margin-top: 0.3rem;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+/* The spot picked from a Home pill flashes green so you see where you landed:
+   the photo outline and the name light up together, hold, then fade together */
+@keyframes place-landed-media {
+  0%,
+  60% {
+    outline-color: var(--color-green);
+  }
+}
+
+@keyframes place-landed-name {
+  0%,
+  60% {
+    color: var(--color-green-text);
+  }
+}
+
+.place-card.is-target .place-card__media {
+  animation: place-landed-media 2.4s ease-out;
+}
+
+.place-card.is-target .place-card__name {
+  animation: place-landed-name 2.4s ease-out;
+}
+
+.location-cta {
+  padding-top: var(--spacing-xl);
+}
+
+/* ================================================
+   RESPONSIVE
+   ================================================ */
+
+@media (max-width: 1100px) {
+  .getting-here,
+  .campus {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .getting-here__map {
+    height: 24rem;
+  }
+
+  .campus {
+    gap: var(--spacing-md);
+  }
+
+  .places-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Same breakpoint as the mobile menu (chrome.css): the heading snaps to the
+   full width together with the header */
+@media (max-width: 900px) {
+  .location-hero__head {
+    width: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .location-hero {
+    padding-top: var(--spacing-md);
+  }
+
+  .location-facts {
+    gap: 0.5rem;
+  }
+
+  .location-facts__item {
+    border-radius: var(--radius-sm);
+  }
+
+  .getting-here {
+    padding-top: var(--spacing-md);
+  }
+
+  .getting-here__map {
+    height: 20rem;
+  }
+
+  .transport-card {
+    padding: 1rem;
+  }
+
+  .faq-item__list {
+    columns: 1;
+  }
+
+  .places-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--spacing-md) 0.75rem;
+  }
+
+  .place-card__name {
+    font-size: 1rem;
+  }
+}

@@ -4,11 +4,12 @@
  * Accordion of questions built on native <details>, so it works and
  * stays accessible without JavaScript. With JS, opening and closing
  * glide (height + fade) instead of snapping, and the icon spins.
+ * An item shows either an `answer` paragraph or a `list` of short lines.
  */
 import Icon from './Icon.astro';
 
 interface Props {
-  items: { question: string; answer: string }[];
+  items: { question: string; answer?: string; list?: string[] }[];
 }
 
 const { items } = Astro.props;
@@ -25,7 +26,14 @@ const { items } = Astro.props;
           </span>
         </summary>
         <div class="faq-item__body" data-faq-body>
-          <p>{item.answer}</p>
+          {item.answer && <p>{item.answer}</p>}
+          {item.list && (
+            <ul class="faq-item__list">
+              {item.list.map((line) => (
+                <li>{line}</li>
+              ))}
+            </ul>
+          )}
         </div>
       </details>
     ))

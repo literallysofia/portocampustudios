@@ -1,5 +1,5 @@
 ---
-urlSlug: estudio
+urlSlug: studio
 order: 1
 name: Estúdio
 badge: ×4

@@ -1,0 +1,154 @@
+---
+/**
+ * LocationView
+ * The location page, in two clearly separate halves:
+ * 1. Getting here: headline facts, the map, every way to arrive and the
+ *    faculties around the house.
+ * 2. Discover Porto: a navy band with every spot worth seeing in one grid.
+ *    Each card's id matches the pills on Home (/location/#lello), and the
+ *    card you land on gets a short highlight.
+ */
+import { Image } from 'astro:assets';
+import Sticker from '../components/Sticker.astro';
+import Icon from '../components/Icon.astro';
+import Map from '../components/Map.astro';
+import FaqList from '../components/FaqList.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { getLocaleEntry } from '../lib/content';
+import type { Locale } from '../i18n';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+
+const { data: location } = await getLocaleEntry('location', lang);
+const { data: home } = await getLocaleEntry('home', lang);
+
+const institutionGroups = location.institutions.groups.map((group) => ({
+  question: `${group.title} · ${group.items.length}`,
+  list: group.items,
+}));
+---
+
+<section class="location-hero container">
+  <header class="location-hero__head" data-reveal>
+    <p class="eyebrow">{location.meta.title}</p>
+    <h1 class="location-hero__title">
+      {location.intro.title}
+      {location.intro.accent && <span class="accent">{location.intro.accent}</span>}
+    </h1>
+    <p class="location-hero__text">{location.intro.text}</p>
+  </header>
+  <dl class="location-facts" data-reveal>
+    {
+      location.highlights.map((fact, i) => (
+        <div class:list={['location-facts__item', i === 1 && 'location-facts__item--green']}>
+          <dt class="location-facts__value">{fact.value}</dt>
+          <dd class="location-facts__label">{fact.label}</dd>
+        </div>
+      ))
+    }
+  </dl>
+</section>
+
+<section class="getting-here container" aria-label={location.meta.title}>
+  <Map lang={lang} class="getting-here__map" />
+  <ul class="transport-cards">
+    {
+      location.transport.map((item, i) => (
+        <li class="transport-card" data-reveal>
+          <Sticker icon={item.icon} index={i} size="2.75rem" />
+          <div class="transport-card__body">
+            <h2 class="transport-card__title">{item.title}</h2>
+            <p class="transport-card__text">{item.text}</p>
+            {
+              item.lines.length > 0 && (
+                <ul class="transport-card__lines">
+                  {item.lines.map((line) => (
+                    <li class="line-chip">{line}</li>
+                  ))}
+                </ul>
+              )
+            }
+            {
+              item.link && (
+                <a class="text-link transport-card__link" href={item.link.url} target="_blank" rel="noopener">
+                  {item.link.label}
+                  <Icon name="arrow-up-right" size="1em" />
+                </a>
+              )
+            }
+          </div>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<section class="campus container section" aria-labelledby="nearby-title">
+  <div class="campus__nearby" data-reveal>
+    <h2 id="nearby-title" class="campus__title">{location.nearby.title}</h2>
+    <ul class="campus__chips">
+      {
+        location.nearby.items.map((item, i) => (
+          <li class:list={['campus__chip', i === 0 && 'campus__chip--green']}>{item}</li>
+        ))
+      }
+    </ul>
+  </div>
+  <div class="campus__institutions" data-reveal>
+    <h2 class="campus__title">{location.institutions.title}</h2>
+    <FaqList items={institutionGroups} />
+  </div>
+</section>
+
+<section class="discover" id="discover" aria-labelledby="discover-title">
+  <div class="container">
+    <header class="section-head discover__head" data-reveal>
+      <p class="eyebrow">{location.city.title}</p>
+      <h2 id="discover-title">{location.places.title}</h2>
+      <p>{location.city.text}</p>
+    </header>
+    <ul class="places-grid">
+      {
+        location.places.items.map((place) => (
+          <li class="place-card" id={place.id} data-reveal>
+            <div class="place-card__media">
+              <Image src={place.image} alt="" widths={[300]} sizes="(max-width: 768px) 45vw, 20rem" />
+            </div>
+            <h3 class="place-card__name">{place.name}</h3>
+            <p class="place-card__text">{place.text}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<div class="location-cta">
+  <CtaBand lang={lang} {...home.cta} />
+</div>
+
+<script>
+  // Scroll to the anchor a Home link points at: a spot (/location/#lello),
+  // which also flashes, or the whole Porto section (#discover). Done in JS
+  // because, after a client-router page swap, the browser neither scrolls to
+  // the hash nor updates :target.
+  function highlightTarget(scroll: boolean): void {
+    const id = decodeURIComponent(location.hash.slice(1));
+    const target = id ? document.getElementById(id) : null;
+    if (!target) return;
+    const isPlace = target.classList.contains('place-card');
+    // Instant: the site-wide smooth scroll gets dropped during the page transition
+    if (scroll) target.scrollIntoView({ block: isPlace ? 'center' : 'start', behavior: 'instant' });
+    if (!isPlace) return;
+    target.classList.remove('is-target');
+    void target.offsetWidth;
+    target.classList.add('is-target');
+  }
+
+  document.addEventListener('astro:page-load', () => highlightTarget(true));
+  window.addEventListener('hashchange', () => highlightTarget(false));
+</script>

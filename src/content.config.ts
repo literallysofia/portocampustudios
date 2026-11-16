@@ -55,7 +55,7 @@ const rooms = defineCollection({
   loader: glob({ pattern: '*/*.md', base: './src/content/rooms' }),
   schema: ({ image }) =>
     z.object({
-      /** Localized URL slug, e.g. "estudio" → /habitacoes/estudio/ */
+      /** URL slug, always English, e.g. "studio" → /rooms/studio/ */
       urlSlug: z.string(),
       order: z.number(),
       name: z.string(),
@@ -87,18 +87,27 @@ const location = defineCollection({
   schema: ({ image }) =>
     z.object({
       meta: z.object({ title: z.string(), description: z.string() }),
-      intro: z.object({ title: z.string(), text: z.string() }),
+      intro: z.object({ title: z.string(), accent: z.string().optional(), text: z.string() }),
       highlights: z.array(z.object({ value: z.string(), label: z.string() })),
-      transport: z.array(z.object({ icon: z.string(), title: z.string(), text: z.string(), lines: z.array(z.string()).default([]) })),
+      transport: z.array(
+        z.object({
+          icon: z.string(),
+          title: z.string(),
+          text: z.string(),
+          lines: z.array(z.string()).default([]),
+          link: z.object({ label: z.string(), url: z.string().url() }).optional(),
+        })
+      ),
       nearby: z.object({ title: z.string(), items: z.array(z.string()) }),
       institutions: z.object({
         title: z.string(),
         groups: z.array(z.object({ title: z.string(), items: z.array(z.string()) })),
       }),
-      city: z.object({ title: z.string(), text: z.string(), image: image(), imageAlt: z.string() }),
+      city: z.object({ title: z.string(), text: z.string() }),
       places: z.object({
         title: z.string(),
-        items: z.array(z.object({ name: z.string(), text: z.string(), image: image() })),
+        // `id` is the same in every language: it's the card's anchor (#lello)
+        items: z.array(z.object({ id: z.string(), name: z.string(), text: z.string(), image: image() })),
       }),
     }),
 });

@@ -46,9 +46,10 @@ const canonical = new URL(Astro.url.pathname, siteConfig.url).href;
       siteGate.enabled && (
         <script is:inline define:vars={{ gateHash: siteGate.hash }}>
           // Hide the site behind the WIP gate before first paint, unless this
-          // browser has already unlocked it (see SiteGate.astro)
-          var unlocked = false;
-          try { unlocked = localStorage.getItem('pcs-site-gate') === gateHash; } catch (e) {}
+          // browser has already unlocked it (see SiteGate.astro). Local
+          // previews of the production build (astro preview) are never gated.
+          var unlocked = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
+          try { unlocked = unlocked || localStorage.getItem('pcs-site-gate') === gateHash; } catch (e) {}
           if (!unlocked) document.documentElement.classList.add('is-gated');
         </script>
       )
@@ -110,5 +111,6 @@ const canonical = new URL(Astro.url.pathname, siteConfig.url).href;
   @import '../styles/animations.css';
   @import '../styles/chrome.css';
   @import '../styles/home.css';
+  @import '../styles/location.css';
   @import '../styles/gate.css';
 </style>

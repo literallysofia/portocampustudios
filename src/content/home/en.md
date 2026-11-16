@@ -4,7 +4,7 @@ meta:
 hero:
   title: Porto Campus
   accent: Studios
-  subtitle: Your home in the heart of Porto's university district, opposite ISEP and a 7-minute walk from the metro.
+  subtitle: Student studios and apartments in a private complex with a garden, right in the heart of Porto's university district.
   image: ../../assets/photos/house/garden-view.jpg
   imageAlt: Porto Campus Studios garden with blue chairs and green parasols
   chips:
@@ -16,8 +16,8 @@ intro:
   facts:
     - value: '6'
       label: homes in a private complex
-    - value: '7 min'
-      label: walk to Pólo Universitário metro
+    - value: '9'
+      label: services included
     - value: '2017'
       label: welcoming students since
   photos:
@@ -38,7 +38,7 @@ services:
 location:
   eyebrow: Location
   title: Right on campus
-  text: Opposite the Porto School of Engineering, with faculties, the hospital, supermarkets and the metro on your doorstep.
+  text: Faculties, the hospital, supermarkets and the metro on your doorstep. Getting anywhere in the city is easy.
 city:
   eyebrow: The city of Porto
   title: Beautiful and unbeaten

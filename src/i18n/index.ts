@@ -1,6 +1,6 @@
 /**
  * i18n helpers
- * Locales, localized URL slugs (data, so the code stays English) and
+ * Locales, URL slugs (English in every language) and
  * the UI strings used by components. Page copy lives in src/content.
  */
 
@@ -8,13 +8,17 @@ export const locales = ['pt', 'en'] as const;
 export type Locale = (typeof locales)[number];
 export const defaultLocale: Locale = 'pt';
 
-/** Localized slug for each route. Change a URL here, not in src/pages. */
+/**
+ * URL slug for each route, per locale. URLs are always English, so both
+ * languages share the same slug and only the /en/ prefix differs
+ * (/location/ vs /en/location/). Change a URL here, not in src/pages.
+ */
 export const routeSlugs = {
   home: { pt: '', en: '' },
-  room: { pt: 'habitacoes', en: 'rooms' },
-  location: { pt: 'localizacao', en: 'location' },
+  room: { pt: 'rooms', en: 'rooms' },
+  location: { pt: 'location', en: 'location' },
   faq: { pt: 'faq', en: 'faq' },
-  book: { pt: 'reservar', en: 'book' },
+  book: { pt: 'book', en: 'book' },
 } as const satisfies Record<string, Record<Locale, string>>;
 
 export type RouteKey = keyof typeof routeSlugs;
@@ -30,7 +34,6 @@ export function path(lang: Locale, route: RouteKey, slug?: string, hash?: string
 export const ui = {
   pt: {
     'nav.rooms': 'Habitações',
-    'nav.services': 'Serviços',
     'nav.location': 'Localização',
     'nav.faq': 'FAQ',
     'nav.book': 'Reservar',
@@ -49,6 +52,7 @@ export const ui = {
     'cta.whatsapp': 'WhatsApp',
     'cta.more': 'Saber mais',
     'cta.allFaq': 'Ver todas as perguntas',
+    'cta.compareRooms': 'Comparar habitações',
     'cta.howToGetHere': 'Como chegar',
     'map.open': 'Abrir no Google Maps',
     'map.load': 'Mostrar mapa',
@@ -80,7 +84,6 @@ export const ui = {
   },
   en: {
     'nav.rooms': 'Rooms',
-    'nav.services': 'Services',
     'nav.location': 'Location',
     'nav.faq': 'FAQ',
     'nav.book': 'Book',
@@ -99,6 +102,7 @@ export const ui = {
     'cta.whatsapp': 'WhatsApp',
     'cta.more': 'Learn more',
     'cta.allFaq': 'See all questions',
+    'cta.compareRooms': 'Compare rooms',
     'cta.howToGetHere': 'How to get here',
     'map.open': 'Open in Google Maps',
     'map.load': 'Show map',

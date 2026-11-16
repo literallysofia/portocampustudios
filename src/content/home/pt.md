@@ -4,7 +4,7 @@ meta:
 hero:
   title: Porto Campus
   accent: Studios
-  subtitle: A tua casa no coração académico do Porto, em frente ao ISEP e a 7 minutos do metro.
+  subtitle: Estúdios e apartamentos para estudantes, num condomínio privado com jardim, no coração académico do Porto.
   image: ../../assets/photos/house/garden-view.jpg
   imageAlt: Jardim do Porto Campus Studios com cadeiras azuis e chapéus-de-sol verdes
   chips:
@@ -16,8 +16,8 @@ intro:
   facts:
     - value: '6'
       label: habitações num condomínio privado
-    - value: '7 min'
-      label: a pé do metro Pólo Universitário
+    - value: '9'
+      label: serviços incluídos
     - value: '2017'
       label: a receber estudantes desde
   photos:
@@ -38,7 +38,7 @@ services:
 location:
   eyebrow: Localização
   title: No meio do campus
-  text: Em frente ao Instituto Superior de Engenharia do Porto, com faculdades, hospital, supermercados e metro à porta.
+  text: Faculdades, hospital, supermercados e metro à porta. Chegas a qualquer ponto da cidade sem stress.
 city:
   eyebrow: Cidade do Porto
   title: Bela e Invicta

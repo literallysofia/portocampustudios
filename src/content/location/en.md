@@ -3,11 +3,12 @@ meta:
   title: Location
   description: How to get to Porto Campus Studios, on the Asprela university campus opposite ISEP. Metro, bus, car, train and airport.
 intro:
-  title: Opposite ISEP, on the Asprela campus
+  title: Opposite ISEP, on the
+  accent: Asprela campus
   text: Porto Campus Studios sits at the highest point of the Asprela university campus, the University of Porto's third campus. Around it are faculties, São João Hospital, shops and services, two metro stations and plenty of bus stops.
 highlights:
-  - value: '0 min'
-    label: from ISEP, right across the street
+  - value: '3 min'
+    label: walk to ISEP
   - value: '7 min'
     label: walk to Pólo Universitário metro
   - value: '2'
@@ -21,6 +22,9 @@ transport:
     title: Bus
     text: Several STCP lines stop close by, including night buses.
     lines: ['300', '301', '304', '600', '603', '704', '803', 4M, 11M]
+    link:
+      label: Timetables and routes on stcp.pt
+      url: https://www.stcp.pt/pt/viajar/linhas/
   - icon: train
     title: Train
     text: From São Bento, take line D towards Hospital São João. From Campanhã, take the metro to Trindade and change to line D.
@@ -85,53 +89,57 @@ institutions:
         - Instituto Português de Administração de Marketing
         - Instituto Superior de Serviço Social do Porto
 city:
-  title: The city of Porto
-  text: Portugal's second-largest city and the North's main university, business and cultural hub. Its old town has been a UNESCO World Heritage Site since 1996, and Porto has been voted Best European Destination three times.
-  image: ../../assets/photos/city/ribeira.jpg
-  imageAlt: Porto's Ribeira seen from the Douro river
+  title: Discover Porto
+  text: A UNESCO World Heritage old town since 1996, and downtown is a short metro ride away. Here's what's worth seeing.
 places:
-  title: Places to see
+  title: The spots you can't miss
   items:
-    - name: Ribeira
+    - id: ribeira
+      name: Ribeira
       text: Porto's most iconic neighbourhood, on the Douro, packed with terraces and restaurants.
       image: ../../assets/photos/city/places/ribeira.jpg
-    - name: Clérigos Tower
+    - id: clerigos
+      name: Clérigos Tower
       text: The city's landmark. Climb the 240 steps for the best view of Porto.
       image: ../../assets/photos/city/places/clerigos.jpg
-    - name: Livraria Lello
+    - id: lello
+      name: Livraria Lello
       text: One of the most beautiful bookshops in the world, famous for its red staircase.
       image: ../../assets/photos/city/places/lello.jpg
-    - name: São Bento Station
+    - id: sao-bento
+      name: São Bento Station
       text: A train station that doubles as a museum of azulejo tiles.
       image: ../../assets/photos/city/places/sao-bento.jpg
-    - name: Avenida dos Aliados
-      text: The heart of downtown, with the City Hall at the top.
-      image: ../../assets/photos/city/places/aliados.jpg
-    - name: Porto Cathedral
+    - id: cathedral
+      name: Porto Cathedral
       text: One of the country's oldest monuments, overlooking the city's rooftops.
       image: ../../assets/photos/city/places/cathedral.jpg
-    - name: Douro River
+    - id: douro
+      name: Douro River
       text: Boat trips under the six bridges or a sunset on the quay.
       image: ../../assets/photos/city/places/douro.jpg
-    - name: Port wine cellars
+    - id: port-wine-cellars
+      name: Port wine cellars
       text: Across the river in Gaia, dozens of cellars open their doors for tastings.
       image: ../../assets/photos/city/places/port-wine-cellars.jpg
-    - name: Bolhão Market
+    - id: bolhao
+      name: Bolhão Market
       text: The city's historic market, freshly renovated, with fresh produce and flowers.
       image: ../../assets/photos/city/places/bolhao.jpg
-    - name: Rua de Santa Catarina
+    - id: santa-catarina
+      name: Rua de Santa Catarina
       text: Downtown's busiest shopping street, mostly pedestrian.
       image: ../../assets/photos/city/places/santa-catarina.jpg
-    - name: Café Majestic
+    - id: majestic
+      name: Café Majestic
       text: A historic Art Nouveau café right on Santa Catarina.
       image: ../../assets/photos/city/places/majestic.jpg
-    - name: University Rectory
-      text: The University of Porto's historic building, home to a museum and gallery.
-      image: ../../assets/photos/city/places/university-rectory.jpg
-    - name: Casa da Música
+    - id: casa-da-musica
+      name: Casa da Música
       text: The city's most iconic concert hall, in Boavista.
       image: ../../assets/photos/city/places/casa-da-musica.jpg
-    - name: Foz do Douro
+    - id: foz
+      name: Foz do Douro
       text: Where the river meets the sea. Seafront promenade, terraces and sunsets.
       image: ../../assets/photos/city/places/foz.jpg
 ---

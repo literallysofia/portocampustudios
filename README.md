@@ -27,7 +27,7 @@ You don't need to touch any code to change the text or photos.
 | FAQ | `src/content/faq/pt.md`, `en.md` |
 | Booking page | `src/content/book/pt.md`, `en.md` |
 | Buttons, menus and other small labels | `src/i18n/index.ts` |
-| URLs (e.g. `/habitacoes/`) | `routeSlugs` in `src/i18n/index.ts` |
+| URLs (always English, e.g. `/rooms/`) | `routeSlugs` in `src/i18n/index.ts` |
 | Colours, fonts, spacing | `src/styles/theme.css` |
 
 - **Photos** live in `src/assets/photos/`. Add a file there and reference it from the content file, e.g. `../../../assets/photos/t4/dsc-0985.jpg` (paths are relative to the `.md` file). Every gallery photo needs an `alt` description in both languages.
