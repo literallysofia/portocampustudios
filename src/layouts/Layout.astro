@@ -9,6 +9,8 @@
  * @prop description - meta description
  * @prop alternates - localized URLs of this page, for hreflang + the language switch
  * @prop current - route of this page (highlights the nav, hides the mobile book bar on /book)
+ * @prop bare - one-screen page with only the header (the 404): no footer,
+ *   book bar or back-to-top, and kept out of search results
  */
 
 import { ClientRouter } from 'astro:transitions';
@@ -27,9 +29,10 @@ interface Props {
   description: string;
   alternates: Record<Locale, string>;
   current: RouteKey;
+  bare?: boolean;
 }
 
-const { lang, title, description, alternates, current } = Astro.props;
+const { lang, title, description, alternates, current, bare = false } = Astro.props;
 const fullTitle = title ? `${title} · ${siteConfig.name}` : siteConfig.name;
 const canonical = new URL(Astro.url.pathname, siteConfig.url).href;
 ---
@@ -41,7 +44,7 @@ const canonical = new URL(Astro.url.pathname, siteConfig.url).href;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
-    {siteGate.enabled && <meta name="robots" content="noindex, nofollow" />}
+    {(siteGate.enabled || bare) && <meta name="robots" content="noindex, nofollow" />}
     {
       siteGate.enabled && (
         <script is:inline define:vars={{ gateHash: siteGate.hash }}>
@@ -85,9 +88,15 @@ const canonical = new URL(Astro.url.pathname, siteConfig.url).href;
     <main id="content">
       <slot />
     </main>
-    <Footer lang={lang} alternates={alternates} />
-    {current !== 'book' && <MobileBookBar lang={lang} />}
-    <BackToTop lang={lang} />
+    {
+      !bare && (
+        <>
+          <Footer lang={lang} alternates={alternates} />
+          {current !== 'book' && <MobileBookBar lang={lang} />}
+          <BackToTop lang={lang} />
+        </>
+      )
+    }
     <Reveal />
     <script>
       // Fade photos in once they're decoded instead of painting progressively
@@ -113,5 +122,6 @@ const canonical = new URL(Astro.url.pathname, siteConfig.url).href;
   @import '../styles/home.css';
   @import '../styles/location.css';
   @import '../styles/faq.css';
+  @import '../styles/not-found.css';
   @import '../styles/gate.css';
 </style>

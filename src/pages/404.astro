@@ -1,0 +1,59 @@
+---
+/**
+ * 404
+ * GitHub Pages serves this single 404.html for every missing URL in both
+ * languages. It's built in Portuguese with the English copy alongside;
+ * a tiny script shows the English one when the broken link is under /en/
+ * (the header stays in Portuguese). One screen, no scrolling.
+ */
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import { siteConfig } from '../config';
+import { locales, path, t } from '../i18n';
+
+const alternates = { pt: path('pt', 'home'), en: path('en', 'home') };
+const enTitle = `${t('en')('notFound.meta')} · ${siteConfig.name}`;
+---
+
+<Layout lang="pt" title={t('pt')('notFound.meta')} description={t('pt')('notFound.text')} alternates={alternates} current="home" bare>
+  <section class="not-found container">
+    {
+      locales.map((lang) => {
+        const tr = t(lang);
+        return (
+          <div class="not-found__inner" data-not-found={lang} hidden={lang !== 'pt'}>
+            <div class="not-found__code" aria-hidden="true">
+              4<span class="accent">0</span>4
+              <span class="not-found__badge">
+                <Icon name="home-question" size="70%" />
+              </span>
+            </div>
+            <p class="eyebrow">{tr('notFound.meta')}</p>
+            <h1 class="not-found__title">
+              {tr('notFound.title')} <span class="accent">{tr('notFound.accent')}</span>
+            </h1>
+            <p class="not-found__text">{tr('notFound.text')}</p>
+            <div class="not-found__actions">
+              <a class="button" href={path(lang, 'home')}>
+                {tr('notFound.home')}
+              </a>
+              <a class="button button--ghost" href={path(lang, 'room')}>
+                {tr('cta.seeRooms')}
+              </a>
+            </div>
+          </div>
+        );
+      })
+    }
+  </section>
+
+  <script is:inline define:vars={{ enTitle }}>
+    // Broken link under /en/: show the English copy before first paint
+    if (/^\/en(\/|$)/.test(location.pathname)) {
+      document.querySelector('[data-not-found="pt"]').hidden = true;
+      document.querySelector('[data-not-found="en"]').hidden = false;
+      document.documentElement.lang = 'en';
+      document.title = enTitle;
+    }
+  </script>
+</Layout>

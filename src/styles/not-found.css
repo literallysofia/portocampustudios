@@ -1,0 +1,127 @@
+/* ================================================
+   404
+   ================================================
+   Exactly one screen under the header (the layout drops the
+   footer for this page), content centred, never scrolls.
+   ================================================ */
+
+.not-found {
+  display: grid;
+  place-items: center;
+  height: calc(100dvh - var(--header-height));
+  padding-block: var(--spacing-md);
+  overflow: hidden;
+  text-align: center;
+}
+
+.not-found__inner {
+  display: grid;
+  justify-items: center;
+  gap: var(--spacing-sm);
+  max-width: 64rem;
+}
+
+.not-found__inner[hidden] {
+  display: none;
+}
+
+.not-found__code {
+  position: relative;
+  margin-bottom: var(--spacing-xs);
+  font-family: var(--font-display);
+  /* Also capped by the screen height, so it fits a phone turned sideways */
+  font-size: min(clamp(6rem, 3rem + 14vw, 13rem), 24dvh);
+  font-weight: 800;
+  line-height: 0.85;
+  letter-spacing: -0.05em;
+}
+
+/* A tilted, wobbling badge on the top-right corner of the last 4. Sized in
+   em, so it grows and shrinks with the digits */
+.not-found__badge {
+  position: absolute;
+  top: -0.3em;
+  right: -0.42em;
+  display: grid;
+  place-items: center;
+  width: 0.6em;
+  height: 0.6em;
+  /* The same hand-drawn blob as the site's stickers (Sticker.astro) */
+  border-radius: 55% 45% 40% 60% / 45% 55% 45% 55%;
+  background: var(--color-green);
+  color: var(--color-ink);
+  /* The "?" in the same blue as the 0 */
+  --icon-accent: var(--color-accent);
+  transform: rotate(-10deg);
+  animation: not-found-wobble 3.2s var(--ease-out) infinite;
+}
+
+/* Mostly still, then a quick "huh?" head tilt */
+@keyframes not-found-wobble {
+  0%,
+  70%,
+  100% {
+    transform: rotate(-10deg);
+  }
+  78% {
+    transform: rotate(8deg) scale(1.06);
+  }
+  86% {
+    transform: rotate(-16deg);
+  }
+  93% {
+    transform: rotate(-6deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .not-found__badge {
+    animation: none;
+  }
+}
+
+.not-found__title {
+  font-size: clamp(1.75rem, 1.1rem + 2.8vw, 3.75rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+.not-found__text {
+  max-width: 42rem;
+  font-size: var(--text-lg);
+  color: var(--color-text-muted);
+}
+
+.not-found__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: var(--spacing-xs);
+}
+
+/* Very short screens (phone sideways): tighter spacing and smaller copy so
+   everything still fits on one screen */
+@media (max-height: 520px) {
+  .not-found {
+    padding-block: 0.75rem;
+  }
+
+  .not-found__inner {
+    gap: 0.5rem;
+  }
+
+  .not-found__code,
+  .not-found__actions {
+    margin: 0;
+  }
+
+  .not-found__title {
+    font-size: 1.5rem;
+  }
+
+  .not-found__text {
+    font-size: var(--text-sm);
+  }
+}
