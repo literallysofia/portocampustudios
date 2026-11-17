@@ -704,6 +704,22 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  /* Two columns: the blue/navy alternation (a checkerboard on three
+     columns) would stack into one blue and one navy column, so the 3rd
+     and 4th of every four swap: blue, navy, navy, blue = a checkerboard
+     again. The garden stays green. */
+  .service:nth-child(4n + 3) .sticker:not(.sticker--green) {
+    background: var(--color-ink);
+    color: var(--color-on-ink);
+    --icon-accent: var(--color-accent);
+  }
+
+  .service:nth-child(4n + 4) .sticker:not(.sticker--green) {
+    background: var(--color-accent);
+    color: var(--color-ink);
+    --icon-accent: #FFFFFF;
+  }
+
   /* Two columns: a lone last card (odd count) spans the full width */
   .service:last-child:nth-child(odd) {
     grid-column: 1 / -1;
