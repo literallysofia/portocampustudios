@@ -7,6 +7,11 @@ title: A tua casa
 accent: "à\u00a0moda do Porto"
 text: Três tipos de casa, todas mobiladas, no mesmo condomínio privado com jardim.
 featuresTitle: O que tem cada divisão
+services:
+  eyebrow: Serviços
+  title: Em todas as habitações
+  text: Seja qual for a tua favorita, isto vem com ela.
+  extra: Extra
 contact:
   title: Já tens favorita?
   text: Pergunta-nos se está livre para as tuas datas.

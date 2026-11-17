@@ -5,12 +5,14 @@
  * photo carousel on one side (alternating) and its details, with the
  * room-by-room breakdown, on the other.
  * Pills at the top and the room cards on Home jump to a room
- * (/rooms/#t0). What's included in every home is listed once, on Home;
- * here each room only describes itself. The contact card ends the page.
+ * (/rooms/#t0). Each room describes only itself; what every home shares
+ * comes after the rooms: Home's services band with the services as pills,
+ * from the same services file (so the two never disagree). The contact card ends the page.
  */
 import Carousel from '../components/Carousel.astro';
 import FaqList from '../components/FaqList.astro';
 import ContactCard from '../components/ContactCard.astro';
+import Sticker from '../components/Sticker.astro';
 import { getLocaleEntry, getRooms } from '../lib/content';
 import { t, type Locale } from '../i18n';
 
@@ -22,6 +24,7 @@ const { lang } = Astro.props;
 const tr = t(lang);
 
 const { data: page } = await getLocaleEntry('roomsPage', lang);
+const { data: services } = await getLocaleEntry('services', lang);
 const rooms = await getRooms(lang);
 ---
 
@@ -77,5 +80,28 @@ const rooms = await getRooms(lang);
     ))
   }
 </div>
+
+{/* Home's services band and heading (home.css), with a lighter list:
+    white pills with just the sticker and the name */}
+<section class="services services--rooms section" aria-labelledby="services-title">
+  <div class="container">
+    <header class="section-head" data-reveal>
+      <p class="eyebrow">{page.services.eyebrow}</p>
+      <h2 id="services-title">{page.services.title}</h2>
+      <p>{page.services.text}</p>
+    </header>
+    <ul class="service-pills">
+      {
+        services.items.map((item, i) => (
+          <li class="service-pill" data-reveal>
+            <Sticker icon={item.icon} index={i} size="2.25rem" />
+            {item.title}
+            {item.extra && <span class="tag">{page.services.extra}</span>}
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
 
 <ContactCard lang={lang} {...page.contact} />

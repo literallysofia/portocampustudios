@@ -119,6 +119,52 @@
 }
 
 /* ================================================
+   SERVICES (after the rooms)
+   ================================================
+   Home's services band and heading (home.css), but lighter: each service
+   is a white pill with its sticker and name, no description. Paid extras
+   (cleaning) get an "Extra" tag. Not links, so no hover. */
+
+/* Centred, heading and pills together: the pills never fill a whole row,
+   so left-aligned they left a big empty gap on the right */
+.services--rooms {
+  margin-top: var(--spacing-xl);
+  text-align: center;
+}
+
+.services--rooms .section-head {
+  justify-items: center;
+  margin-inline: auto;
+}
+
+.service-pills {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 62rem;
+  margin-inline: auto;
+  gap: 0.75rem;
+  margin-block: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.service-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.4rem 1.1rem 0.4rem 0.4rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-bg);
+  font-weight: 500;
+}
+
+.service-pill .tag {
+  padding: 0.1rem 0.55rem;
+  font-size: 0.75rem;
+}
+
+/* ================================================
    CAROUSEL (Carousel.astro)
    ================================================ */
 
@@ -237,6 +283,16 @@
    ================================================ */
 
 @media (max-width: 900px) {
+  .service-pills {
+    gap: 0.5rem;
+  }
+
+  .service-pill {
+    gap: 0.5rem;
+    padding-right: 0.9rem;
+    font-size: var(--text-sm);
+  }
+
   .room {
     grid-template-columns: minmax(0, 1fr);
     gap: var(--spacing-md);

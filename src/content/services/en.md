@@ -23,6 +23,7 @@ items:
     text: Shared by all the homes.
   - icon: sparkles
     title: Cleaning
+    extra: true
     text: Optional service, for an extra fee.
   - icon: lock
     title: Gated complex

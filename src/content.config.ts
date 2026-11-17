@@ -79,7 +79,15 @@ const rooms = defineCollection({
 const services = defineCollection({
   loader: localeFiles('services'),
   schema: z.object({
-    items: z.array(z.object({ icon: z.string(), title: z.string(), text: z.string() })),
+    items: z.array(
+      z.object({
+        icon: z.string(),
+        title: z.string(),
+        text: z.string(),
+        /** Paid on top of the rent (cleaning): the rooms page labels it */
+        extra: z.boolean().optional(),
+      }),
+    ),
   }),
 });
 
@@ -124,6 +132,8 @@ const roomsPage = defineCollection({
     text: z.string(),
     /** Heading above each room's fold-out breakdown */
     featuresTitle: z.string(),
+    /** The services section after the rooms: heading, and the label for paid extras */
+    services: z.object({ eyebrow: z.string(), title: z.string(), text: z.string(), extra: z.string() }),
     contact: contactCard,
   }),
 });

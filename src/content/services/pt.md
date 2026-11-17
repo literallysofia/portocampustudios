@@ -23,6 +23,7 @@ items:
     text: Partilhada por todas as habitações.
   - icon: sparkles
     title: Limpeza
+    extra: true
     text: Serviço opcional, por um valor adicional.
   - icon: lock
     title: Condomínio fechado
