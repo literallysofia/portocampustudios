@@ -138,6 +138,8 @@ p {
   font-size: clamp(2.75rem, 1.4rem + 5.2vw, 6rem);
   line-height: 0.95;
   letter-spacing: -0.04em;
+  /* Even lines, so a short word ("à") isn't left hanging at a line end */
+  text-wrap: balance;
 }
 
 .page-hero__text {
@@ -169,7 +171,14 @@ p {
 
 /* ================================================
    BUTTONS AND CHIPS
-   ================================================ */
+   ================================================
+   Three buttons, one job each:
+   .button          primary: the main action of a block (navy)
+   .button--ghost   secondary: the action next to it (navy outline)
+   Contact buttons always keep their own colours, on any background:
+   .button--accent  Email, sky blue
+   .button--green   WhatsApp, green
+   On navy backgrounds the primary is .button--light (white). */
 
 .button {
   display: inline-flex;
@@ -186,17 +195,34 @@ p {
   cursor: pointer;
   background: var(--color-ink);
   color: var(--color-on-ink);
-  transition: transform var(--duration-fast) var(--ease-out), background-color var(--duration-fast) ease;
+  transition:
+    translate var(--duration-fast) var(--ease-out),
+    scale var(--duration-fast) var(--ease-out),
+    background-color var(--duration-fast) ease;
 }
 
+/* Every button, including the round icon ones (carousel arrows, footer
+   back-to-top), lifts 2px on hover and presses down when clicked. It uses translate/scale, not transform, so a
+   button that also fades in on scroll ([data-reveal], whose transform
+   wins) still lifts, e.g. "Como chegar" on Home */
 .button:hover {
-  transform: translateY(-2px);
+  translate: 0 -2px;
+}
+
+.button[data-reveal] {
+  transition:
+    opacity 0.9s var(--ease-out),
+    transform 0.9s var(--ease-out),
+    translate var(--duration-fast) var(--ease-out),
+    scale var(--duration-fast) var(--ease-out);
 }
 
 .button:active {
-  transform: translateY(0) scale(0.98);
+  translate: 0;
+  scale: 0.98;
 }
 
+/* Email, always */
 .button--accent {
   background: var(--color-accent);
   color: var(--color-ink);
@@ -282,4 +308,280 @@ p {
 .button--green {
   background: var(--color-green);
   color: var(--color-ink);
+}
+
+/* ================================================
+   LINK HOVER
+   ================================================
+   Every text link (not buttons; the header nav keeps its own
+   sliding bar) has the same hover: no underline, the colour
+   gets stronger. Blue links on white turn navy; grey links on
+   navy turn white; white footer links turn sky blue. Links
+   with an arrow also nudge it right. */
+
+.text-link,
+.map__link,
+.cta-band__email,
+.site-footer__address,
+.site-footer__col a {
+  text-decoration: none;
+  transition: color var(--duration-fast) ease;
+}
+
+.text-link:hover,
+.map__link:hover {
+  color: var(--color-ink);
+}
+
+.cta-band__email:hover,
+.site-footer__address:hover {
+  color: var(--color-on-ink);
+}
+
+.site-footer__col a:hover {
+  color: var(--color-accent);
+}
+
+.text-link svg {
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.text-link:hover svg {
+  transform: translateX(0.25rem);
+}
+
+/* ================================================
+   PILLS AND CHIPS
+   ================================================
+   One rule across the site: anything you can tap is a
+   .topic-pill (FAQ topics, room types, Porto spots on Home):
+   white with a grey outline, soft green on hover and for the
+   current FAQ topic. A plain label you can't tap is a flat
+   grey .tag. */
+
+.topic-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 0.6rem 0.55rem 1rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-bg);
+  box-shadow: inset 0 0 0 1.5px var(--color-border);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-ink);
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color var(--duration-fast),
+    box-shadow var(--duration-fast),
+    color var(--duration-fast);
+}
+
+/* Pills without a count or icon on the right */
+.topic-pill:not(:has(> .topic-pill__count, > svg)) {
+  padding-right: 1rem;
+}
+
+.topic-pill__count {
+  display: grid;
+  place-items: center;
+  min-width: 1.6rem;
+  height: 1.6rem;
+  padding-inline: 0.4rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Hover, and the current topic on the FAQ: soft green */
+.topic-pill.is-active {
+  background: var(--color-green-soft);
+  box-shadow: inset 0 0 0 1.5px var(--color-green);
+  color: var(--color-green-text);
+}
+
+.topic-pill.is-active .topic-pill__count {
+  background: var(--color-bg);
+}
+
+@media (hover: hover) {
+  .topic-pill:hover {
+    background: var(--color-green-soft);
+    box-shadow: inset 0 0 0 1.5px var(--color-green);
+    color: var(--color-green-text);
+  }
+
+  .topic-pill:hover .topic-pill__count {
+    background: var(--color-bg);
+  }
+}
+
+/* The "see all" pill at the end of a row (Saber mais on Home): navy. On
+   hover it stays navy, a touch lighter, and its arrow nudges right; jumping
+   to the other pills' green was too much of a change */
+.topic-pill--more {
+  background: var(--color-ink);
+  box-shadow: none;
+  color: var(--color-on-ink);
+}
+
+.topic-pill--more svg {
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+
+@media (hover: hover) {
+  .topic-pill--more:hover {
+    background: color-mix(in srgb, var(--color-ink) 86%, #FFFFFF);
+    box-shadow: none;
+    color: var(--color-on-ink);
+  }
+
+  .topic-pill--more:hover svg {
+    transform: translateX(0.2rem);
+  }
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 0.95rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-ink);
+}
+
+/* A label that needs to stand out (ISEP, right next door): navy, not green,
+   so it never reads as tappable */
+.tag--strong {
+  background: var(--color-ink);
+  color: var(--color-on-ink);
+}
+
+/* A touch smaller on phones, so two pills share a line */
+@media (max-width: 900px) {
+  .topic-pill {
+    gap: 0.45rem;
+    padding: 0.4rem 0.45rem 0.4rem 0.8rem;
+    font-size: 0.8125rem;
+  }
+
+  .topic-pill__count {
+    min-width: 1.4rem;
+    height: 1.4rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* ================================================
+   PAGE END (navy contact strip on inner pages, ContactCard.astro)
+   ================================================ */
+
+/* Same white space above and below on every page, so the strip sits
+   evenly between the content and the navy footer */
+.page-end {
+  padding-block: var(--spacing-xl);
+}
+
+.contact-card {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm) clamp(1.25rem, 2.5vw, 2rem);
+  padding: clamp(1.75rem, 1rem + 2.5vw, 3rem) clamp(1.5rem, 1rem + 2vw, 3rem);
+  border-radius: var(--radius-lg);
+  background: var(--color-ink);
+  color: var(--color-on-ink);
+}
+
+/* Faint blue blob glowing in the corner, the same shape as Home's band */
+.contact-card__blob {
+  position: absolute;
+  top: -40%;
+  right: -6%;
+  width: min(26rem, 55%);
+  fill: var(--color-accent);
+  opacity: 0.18;
+  pointer-events: none;
+}
+
+/* The happy little house on a green blob sticker */
+.contact-card__mascot {
+  position: relative;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: clamp(4rem, 3rem + 2.5vw, 5.5rem);
+  aspect-ratio: 1;
+  border-radius: 55% 45% 40% 60% / 45% 55% 45% 55%;
+  background: var(--color-green);
+  color: var(--color-ink);
+  transform: rotate(-8deg);
+}
+
+/* Says hi when you hover the card */
+@keyframes contact-card-hi {
+  0%,
+  100% {
+    transform: rotate(-8deg);
+  }
+  30% {
+    transform: rotate(8deg) scale(1.06);
+  }
+  60% {
+    transform: rotate(-14deg);
+  }
+  80% {
+    transform: rotate(-4deg);
+  }
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .contact-card:hover .contact-card__mascot {
+    animation: contact-card-hi 0.9s var(--ease-out);
+  }
+}
+
+.contact-card__copy {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.contact-card__title {
+  font-size: clamp(1.6rem, 1.2rem + 1.4vw, 2.25rem);
+  letter-spacing: -0.03em;
+}
+
+.contact-card__text {
+  margin-top: 0.35rem;
+  font-size: var(--text-lg);
+  color: var(--color-on-ink-muted);
+}
+
+.contact-card__actions {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* Phones: stacked, house on top, blob moves to the bottom corner */
+@media (max-width: 768px) {
+  .contact-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .contact-card__blob {
+    top: auto;
+    bottom: -30%;
+    right: -30%;
+    width: 85%;
+  }
 }

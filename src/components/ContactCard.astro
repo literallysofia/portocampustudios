@@ -1,0 +1,55 @@
+---
+/**
+ * ContactCard
+ * The ending of every inner page (Rooms, Location, FAQ): a navy card with
+ * the happy little house (the 404's mascot, smiling here) on a green blob,
+ * a heading, one line and the Email / WhatsApp buttons, a faint blue blob
+ * in the corner, and a wobble from the house on hover. In its own section
+ * with the same white space above and below. Home ends with the big
+ * CtaBand instead. As soon as any part of the card is on screen, the
+ * mobile book bar steps aside, so it never covers it.
+ *
+ * @prop lang - button labels language
+ * @prop title - heading, e.g. "Still have questions?"
+ * @prop text - one line under the heading
+ */
+import Icon from './Icon.astro';
+import { siteConfig } from '../config';
+import { t, type Locale } from '../i18n';
+
+interface Props {
+  lang: Locale;
+  title: string;
+  text: string;
+}
+
+const { lang, title, text } = Astro.props;
+const tr = t(lang);
+// Plain contact links: a question, not a booking request, so no prefilled message
+const whatsapp = `https://wa.me/${siteConfig.phone.replace(/\D/g, '')}`;
+---
+
+<div class="page-end container">
+  <aside class="contact-card" data-reveal data-book-cta>
+    <svg class="contact-card__blob" viewBox="0 0 400 300" aria-hidden="true">
+      <path d="M52 58C102 6 250 -4 330 36s82 150 20 208-226 52-290 10S2 110 52 58z" />
+    </svg>
+    <span class="contact-card__mascot" aria-hidden="true">
+      <Icon name="home-happy" size="64%" />
+    </span>
+    <div class="contact-card__copy">
+      <h2 class="contact-card__title">{title}</h2>
+      <p class="contact-card__text">{text}</p>
+    </div>
+    <div class="contact-card__actions">
+      <a class="button button--accent" href={`mailto:${siteConfig.email}`}>
+        <Icon name="mail" />
+        {tr('cta.email')}
+      </a>
+      <a class="button button--green" href={whatsapp} target="_blank" rel="noopener">
+        <Icon name="whatsapp" />
+        {tr('cta.whatsapp')}
+      </a>
+    </div>
+  </aside>
+</div>

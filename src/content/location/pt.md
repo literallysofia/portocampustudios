@@ -142,4 +142,7 @@ places:
       name: Foz do Douro
       text: Onde o rio encontra o mar. Passeio marítimo, esplanadas e pôr do sol.
       image: ../../assets/photos/city/places/foz.jpg
+contact:
+  title: Queres vir ver?
+  text: Marcamos uma visita. Fala connosco por email ou WhatsApp.
 ---

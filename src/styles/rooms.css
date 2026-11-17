@@ -1,0 +1,260 @@
+/* ================================================
+   ROOMS PAGE
+   ================================================
+   One section per room: carousel on one side, details on
+   the other, swapping sides room to room. The pills come
+   from global.css (.topic-pill).
+   ================================================ */
+
+.room-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rooms-list {
+  display: grid;
+  gap: var(--spacing-xl);
+  /* No bottom padding: the end card (ContactCard) brings its own spacing */
+  padding-top: var(--spacing-lg);
+}
+
+.room {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: clamp(2rem, 4vw, 4.5rem);
+  align-items: start;
+}
+
+/* Every other room puts its photos on the right. The columns swap too,
+   so every carousel gets the same width (and so the same size) */
+.room:nth-of-type(even) {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+}
+
+.room:nth-of-type(even) .room__media {
+  order: 2;
+}
+
+.room__info {
+  display: grid;
+  gap: var(--spacing-sm);
+}
+
+.room__title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: clamp(2rem, 1.4rem + 2vw, 3.25rem);
+  letter-spacing: -0.03em;
+}
+
+.room__badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-green);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--color-ink);
+}
+
+.room__text {
+  font-size: var(--text-lg);
+  color: var(--color-text-muted);
+}
+
+.room__highlights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.room__features {
+  margin-top: var(--spacing-xs);
+}
+
+/* Items flow along the line instead of sitting in fixed half-width
+   columns, so a long one ("Kitchenette com micro-ondas, frigorífico e placa
+   de indução") uses the whole width before it wraps */
+.room__features .faq-item__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.75rem;
+  columns: auto;
+}
+
+.room__features .faq-item__list li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  padding-block: 0;
+}
+
+.room__features .faq-item__list li::before {
+  content: '';
+  flex-shrink: 0;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: var(--color-accent);
+  translate: 0 -0.1em;
+}
+
+.room__features-title {
+  margin-bottom: 0.25rem;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-accent-text);
+}
+
+/* ================================================
+   CAROUSEL (Carousel.astro)
+   ================================================ */
+
+.carousel {
+  position: relative;
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  background: var(--color-surface);
+  /* A hairline edge and a soft shadow lift bright, white-walled photos
+     off the white page */
+  box-shadow:
+    0 0 0 1px rgb(14 42 59 / 0.1),
+    0 18px 40px -18px rgb(14 42 59 / 0.35);
+}
+
+.carousel__track {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-x: auto;
+  /* Swipes go sideways only; nothing inside may ever scroll up and down */
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.carousel__track::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel__track:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: -3px;
+}
+
+.carousel__slide {
+  flex: 0 0 100%;
+  /* Every room photo is 3:2, so they show whole, nothing cropped */
+  aspect-ratio: 3 / 2;
+  scroll-snap-align: start;
+}
+
+.carousel__slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* No scroll fade-in zoom here ([data-reveal] img, animations.css): a
+     zoomed photo is bigger than its slide, which made the track scroll */
+  transform: none;
+}
+
+.carousel__arrow {
+  position: absolute;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 0;
+  border-radius: 50%;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  box-shadow: 0 4px 16px rgb(14 42 59 / 0.18);
+  cursor: pointer;
+  translate: 0 -50%;
+  transition:
+    opacity var(--duration-fast),
+    transform var(--duration-fast);
+}
+
+.carousel__arrow--prev {
+  left: 0.85rem;
+}
+
+.carousel__arrow--prev svg {
+  rotate: 180deg;
+}
+
+.carousel__arrow--next {
+  right: 0.85rem;
+}
+
+.carousel__arrow:disabled {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Same hover as every button (global.css): lift, then press */
+@media (hover: hover) {
+  .carousel__arrow:hover {
+    transform: translateY(-2px);
+  }
+}
+
+.carousel__arrow:active {
+  transform: translateY(0) scale(0.96);
+}
+
+.carousel__count {
+  position: absolute;
+  bottom: 0.85rem;
+  left: 0.85rem;
+  padding: 0.25rem 0.7rem;
+  border-radius: var(--radius-pill);
+  background: rgb(14 42 59 / 0.72);
+  color: #FFFFFF;
+  font-size: 0.8rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ================================================
+   RESPONSIVE
+   ================================================ */
+
+@media (max-width: 900px) {
+  .room {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--spacing-md);
+  }
+
+  .room:nth-of-type(even) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Photos always first when stacked */
+  .room:nth-of-type(even) .room__media {
+    order: 0;
+  }
+}
+
+/* On touch screens swiping is the way; the arrows would just cover the photo */
+@media (hover: none) {
+  .carousel__arrow {
+    display: none;
+  }
+}

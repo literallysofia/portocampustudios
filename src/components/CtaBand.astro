@@ -23,7 +23,7 @@ interface Props {
 const { lang, title, text, image, imageAlt } = Astro.props;
 ---
 
-<section class="cta-band container" data-reveal>
+<section class="cta-band container" data-reveal data-book-cta>
   <div class="cta-band__inner">
     <svg class="cta-band__blob" viewBox="0 0 400 300" aria-hidden="true">
       <path d="M52 58C102 6 250 -4 330 36s82 150 20 208-226 52-290 10S2 110 52 58z" />
@@ -31,8 +31,8 @@ const { lang, title, text, image, imageAlt } = Astro.props;
     <div class="cta-band__copy">
       <h2 class="cta-band__title">{title}</h2>
       <p class="cta-band__text">{text}</p>
-      <div class="cta-band__actions" data-book-cta>
-        <BookingButtons lang={lang} light />
+      <div class="cta-band__actions">
+        <BookingButtons lang={lang} />
         <a class="cta-band__email" href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>
       </div>
     </div>

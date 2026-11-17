@@ -110,6 +110,14 @@ const canonical = new URL(Astro.url.pathname, siteConfig.url).href;
         });
       }
       document.addEventListener('astro:page-load', initImageFade);
+
+      // After a client-router page swap the browser doesn't scroll to the
+      // #hash of the new URL itself (e.g. a Home room card → /rooms/#t0)
+      document.addEventListener('astro:page-load', () => {
+        const id = decodeURIComponent(location.hash.slice(1));
+        const target = id ? document.getElementById(id) : null;
+        target?.scrollIntoView({ block: 'start', behavior: 'instant' });
+      });
     </script>
   </body>
 </html>
@@ -121,6 +129,7 @@ const canonical = new URL(Astro.url.pathname, siteConfig.url).href;
   @import '../styles/chrome.css';
   @import '../styles/home.css';
   @import '../styles/location.css';
+  @import '../styles/rooms.css';
   @import '../styles/faq.css';
   @import '../styles/not-found.css';
   @import '../styles/gate.css';

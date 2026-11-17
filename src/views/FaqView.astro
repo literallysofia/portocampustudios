@@ -6,10 +6,9 @@
  * light up for the group you're reading; on mobile they wrap above the
  * questions, without the highlight. A "still have questions?" card closes the page.
  */
-import Icon from '../components/Icon.astro';
 import FaqList from '../components/FaqList.astro';
+import ContactCard from '../components/ContactCard.astro';
 import { getLocaleEntry } from '../lib/content';
-import { siteConfig } from '../config';
 import { t, type Locale } from '../i18n';
 
 interface Props {
@@ -20,9 +19,6 @@ const { lang } = Astro.props;
 const tr = t(lang);
 
 const { data: faq } = await getLocaleEntry('faq', lang);
-
-// Plain contact links: these are questions, not booking requests, so no prefilled message
-const whatsapp = `https://wa.me/${siteConfig.phone.replace(/\D/g, '')}`;
 ---
 
 <section class="page-hero container">
@@ -36,15 +32,15 @@ const whatsapp = `https://wa.me/${siteConfig.phone.replace(/\D/g, '')}`;
   </header>
 </section>
 
-<div class="faq-page container section">
+<div class="faq-page container">
   <nav class="faq-topics" aria-label={tr('faq.topics')}>
     <ul class="faq-topics__list">
       {
         faq.groups.map((group, i) => (
           <li>
-            <a class:list={['faq-topics__link', i === 0 && 'is-active']} href={`#${group.id}`} data-topic={group.id}>
+            <a class:list={['topic-pill', i === 0 && 'is-active']} href={`#${group.id}`} data-topic={group.id}>
               {group.title}
-              <span class="faq-topics__count">{group.items.length}</span>
+              <span class="topic-pill__count">{group.items.length}</span>
             </a>
           </li>
         ))
@@ -64,24 +60,10 @@ const whatsapp = `https://wa.me/${siteConfig.phone.replace(/\D/g, '')}`;
       ))
     }
 
-    <aside class="faq-contact" data-reveal>
-      <div>
-        <h2 class="faq-contact__title">{faq.contact.title}</h2>
-        <p class="faq-contact__text">{faq.contact.text}</p>
-      </div>
-      <div class="faq-contact__actions">
-        <a class="button button--ghost" href={`mailto:${siteConfig.email}`}>
-          <Icon name="mail" />
-          {tr('cta.email')}
-        </a>
-        <a class="button button--ghost" href={whatsapp} target="_blank" rel="noopener">
-          <Icon name="whatsapp" />
-          {tr('cta.whatsapp')}
-        </a>
-      </div>
-    </aside>
   </div>
 </div>
+
+<ContactCard lang={lang} {...faq.contact} />
 
 <script>
   // Light up the topic pill of the group being read: the last group whose

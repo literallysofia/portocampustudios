@@ -105,12 +105,12 @@ const transportTeaser = location.transport.filter((item) => ['metro', 'bus', 'pl
     <h2 id="rooms-title">{home.rooms.title}</h2>
     {home.rooms.text && <p>{home.rooms.text}</p>}
     <a class="text-link" href={path(lang, 'room')}>
-      {tr('cta.compareRooms')}
+      {tr('cta.allRooms')}
       <Icon name="arrow" size="1.1em" />
     </a>
   </header>
   <div class="rooms__grid">
-    {rooms.map((room) => <RoomCard room={room} href={path(lang, 'room', room.data.urlSlug)} />)}
+    {rooms.map((room) => <RoomCard room={room} href={path(lang, 'room', undefined, room.data.urlSlug)} />)}
   </div>
 </section>
 
@@ -181,14 +181,14 @@ const transportTeaser = location.transport.filter((item) => ['metro', 'bus', 'pl
       {
         location.places.items.slice(0, 8).map((place) => (
           <li>
-            <a class="city__place" href={path(lang, 'location', undefined, place.id)}>
+            <a class="topic-pill" href={path(lang, 'location', undefined, place.id)}>
               {place.name}
             </a>
           </li>
         ))
       }
       <li>
-        <a class="city__place city__place--more" href={path(lang, 'location', undefined, 'discover')}>
+        <a class="topic-pill topic-pill--more" href={path(lang, 'location', undefined, 'discover')}>
           {tr('cta.more')}
           <Icon name="arrow" size="1em" />
         </a>

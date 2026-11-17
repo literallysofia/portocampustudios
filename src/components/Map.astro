@@ -31,7 +31,7 @@ const tr = t(lang);
     <Sticker icon="pin" tone="green" size="4rem" index={2} />
     <p class="map__address">{siteConfig.address.street}<br />{siteConfig.address.postcode} {siteConfig.address.city}</p>
     <div class="map__actions">
-      <button class="button button--light" type="button" data-map-load>{tr('map.load')}</button>
+      <button class="button" type="button" data-map-load>{tr('map.load')}</button>
       <a class="map__link" href={mapsUrl} target="_blank" rel="noopener">{tr('map.open')}</a>
     </div>
   </div>

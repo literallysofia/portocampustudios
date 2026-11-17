@@ -16,8 +16,8 @@ intro:
   facts:
     - value: '6'
       label: habitações num condomínio privado
-    - value: '9'
-      label: serviços incluídos
+    - value: '3'
+      label: tipos de habitação
     - value: '2017'
       label: a receber estudantes desde
   photos:

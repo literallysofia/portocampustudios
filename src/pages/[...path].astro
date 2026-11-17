@@ -8,6 +8,7 @@
 import Layout from '../layouts/Layout.astro';
 import HomeView from '../views/HomeView.astro';
 import LocationView from '../views/LocationView.astro';
+import RoomsView from '../views/RoomsView.astro';
 import FaqView from '../views/FaqView.astro';
 import { getLocaleEntry } from '../lib/content';
 import { locales, path, type Locale, type RouteKey } from '../i18n';
@@ -20,6 +21,7 @@ export async function getStaticPaths() {
   const pages: { lang: Locale; route: RouteKey; alternates: Record<Locale, string> }[] = [];
   for (const lang of locales) {
     pages.push({ lang, route: 'home', alternates: alternatesFor('home') });
+    pages.push({ lang, route: 'room', alternates: alternatesFor('room') });
     pages.push({ lang, route: 'location', alternates: alternatesFor('location') });
     pages.push({ lang, route: 'faq', alternates: alternatesFor('faq') });
   }
@@ -34,17 +36,20 @@ const { lang, route, alternates } = Astro.props;
 const { data: home } = await getLocaleEntry('home', lang);
 const { data: location } = await getLocaleEntry('location', lang);
 const { data: faq } = await getLocaleEntry('faq', lang);
+const { data: roomsPage } = await getLocaleEntry('roomsPage', lang);
 
 // Home uses the plain site name as its title; other pages prepend their own
 const meta = {
   home: { title: undefined, description: home.meta.description },
+  room: { title: roomsPage.meta.title, description: roomsPage.meta.description },
   location: { title: location.meta.title, description: location.meta.description },
   faq: { title: faq.meta.title, description: faq.meta.description },
-}[route as 'home' | 'location' | 'faq'];
+}[route as 'home' | 'room' | 'location' | 'faq'];
 ---
 
 <Layout lang={lang} title={meta.title} description={meta.description} alternates={alternates} current={route}>
   {route === 'home' && <HomeView lang={lang} />}
+  {route === 'room' && <RoomsView lang={lang} />}
   {route === 'location' && <LocationView lang={lang} />}
   {route === 'faq' && <FaqView lang={lang} />}
 </Layout>

@@ -7,7 +7,7 @@
 import { getCollection, getEntry } from 'astro:content';
 import type { Locale } from '../i18n';
 
-type SingleCollection = 'home' | 'services' | 'location' | 'faq' | 'book';
+type SingleCollection = 'home' | 'roomsPage' | 'services' | 'location' | 'faq' | 'book';
 
 export async function getLocaleEntry<C extends SingleCollection>(collection: C, lang: Locale) {
   const entry = await getEntry(collection, lang);

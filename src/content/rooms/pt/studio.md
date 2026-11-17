@@ -3,7 +3,6 @@ urlSlug: studio
 order: 1
 name: Estúdio
 badge: ×4
-nicknames: [Pulp Fiction, Star Wars, The Shining, La La Land]
 summary: Duplex com mezanine, kitchenette e WC privativo. O favorito de quem quer o seu próprio canto.
 description: Quatro estúdios geminados em dois pisos. Em baixo, a zona de estar com kitchenette, mesa e sofá; em cima, na mezanine, o quarto. Pensado para uma pessoa, com espaço para estudar, cozinhar e descansar sem sair de casa.
 highlights:

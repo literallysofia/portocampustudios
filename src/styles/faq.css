@@ -2,8 +2,9 @@
    FAQ PAGE
    ================================================
    Topic pills on the left (sticky on wide screens), grouped
-   questions on the right, then a contact card. The accordion
-   itself (.faq-list, .faq-item) lives in home.css.
+   questions on the right, then the contact card. The pills
+   (.topic-pill) and the card (.contact-card) live in global.css,
+   the accordion (.faq-list) in home.css.
    ================================================ */
 
 .faq-page {
@@ -29,54 +30,18 @@
   list-style: none;
 }
 
-.faq-topics__link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  padding: 0.55rem 0.6rem 0.55rem 1rem;
-  border-radius: var(--radius-pill);
-  box-shadow: inset 0 0 0 1.5px var(--color-border);
-  font-size: var(--text-sm);
-  font-weight: 500;
-  color: var(--color-text);
-  text-decoration: none;
-  white-space: nowrap;
-  transition:
-    background-color var(--duration-fast),
-    box-shadow var(--duration-fast),
-    color var(--duration-fast);
-}
-
-.faq-topics__count {
-  display: grid;
-  place-items: center;
-  min-width: 1.6rem;
-  height: 1.6rem;
-  padding-inline: 0.4rem;
-  border-radius: var(--radius-pill);
-  background: var(--color-surface);
-  font-size: 0.8rem;
-  font-variant-numeric: tabular-nums;
-}
-
-@media (hover: hover) {
-  .faq-topics__link:hover {
-    box-shadow: inset 0 0 0 1.5px var(--color-text);
-  }
-}
-
-/* The group you're reading, same green as the campus chips. Wide screens
-   only: on mobile the pills scroll away with the page, so a highlight
-   would just stay stuck on one topic */
-@media (min-width: 901px) {
-  .faq-topics__link.is-active {
-    background: var(--color-green-soft);
-    box-shadow: inset 0 0 0 1.5px var(--color-green);
-    color: var(--color-green-text);
+/* The group you're reading turns green (.topic-pill.is-active, global.css).
+   Wide screens only: on mobile the pills scroll away with the page, so a
+   highlight would just stay stuck on one topic */
+@media (max-width: 900px) {
+  .faq-topics .topic-pill.is-active {
+    background: var(--color-bg);
+    box-shadow: inset 0 0 0 1.5px var(--color-border);
+    color: var(--color-ink);
   }
 
-  .faq-topics__link.is-active .faq-topics__count {
-    background: var(--color-green);
+  .faq-topics .topic-pill.is-active .topic-pill__count {
+    background: var(--color-surface);
   }
 }
 
@@ -88,32 +53,6 @@
 .faq-group__title {
   margin-bottom: var(--spacing-sm);
   font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
-}
-
-.faq-contact {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--spacing-sm) var(--spacing-md);
-  padding: clamp(1.25rem, 0.8rem + 1.5vw, 2rem);
-  border-radius: var(--radius-card);
-  background: var(--color-surface);
-}
-
-.faq-contact__title {
-  font-size: 1.35rem;
-}
-
-.faq-contact__text {
-  margin-top: 0.25rem;
-  color: var(--color-text-muted);
-}
-
-.faq-contact__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
 }
 
 /* ================================================
@@ -137,18 +76,5 @@
     display: flex;
     flex-wrap: wrap;
     gap: 0.4rem;
-  }
-
-  /* A touch smaller, so two topics share a line on a phone */
-  .faq-topics__link {
-    gap: 0.45rem;
-    padding: 0.4rem 0.45rem 0.4rem 0.8rem;
-    font-size: 0.8125rem;
-  }
-
-  .faq-topics__count {
-    min-width: 1.4rem;
-    height: 1.4rem;
-    font-size: 0.75rem;
   }
 }

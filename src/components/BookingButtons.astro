@@ -1,12 +1,12 @@
 ---
 /**
  * BookingButtons
- * Email + WhatsApp buttons with a prefilled booking message.
+ * Email (sky blue) + WhatsApp (green) buttons with a prefilled booking
+ * message. Same colours on any background.
  * The WhatsApp number comes from src/config.ts.
  *
  * @prop lang - message language
  * @prop room - optional room name added to the message
- * @prop light - light variant for dark backgrounds
  */
 import Icon from './Icon.astro';
 import { emailLink, whatsappLink } from '../lib/booking';
@@ -15,16 +15,15 @@ import { t, type Locale } from '../i18n';
 interface Props {
   lang: Locale;
   room?: string;
-  light?: boolean;
 }
 
-const { lang, room, light = false } = Astro.props;
+const { lang, room } = Astro.props;
 const tr = t(lang);
 const whatsapp = whatsappLink(lang, { room });
 ---
 
 <div class="booking-buttons" data-booking-buttons>
-  <a class:list={['button', light ? 'button--accent' : '']} href={emailLink(lang, { room })} data-booking-email>
+  <a class="button button--accent" href={emailLink(lang, { room })} data-booking-email>
     <Icon name="mail" />
     {tr('cta.email')}
   </a>

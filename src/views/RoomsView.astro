@@ -1,0 +1,81 @@
+---
+/**
+ * RoomsView
+ * Every room type on one page, no detail pages: a section per room with a
+ * photo carousel on one side (alternating) and its details, with the
+ * room-by-room breakdown, on the other.
+ * Pills at the top and the room cards on Home jump to a room
+ * (/rooms/#t0). What's included in every home is listed once, on Home;
+ * here each room only describes itself. The contact card ends the page.
+ */
+import Carousel from '../components/Carousel.astro';
+import FaqList from '../components/FaqList.astro';
+import ContactCard from '../components/ContactCard.astro';
+import { getLocaleEntry, getRooms } from '../lib/content';
+import { t, type Locale } from '../i18n';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const tr = t(lang);
+
+const { data: page } = await getLocaleEntry('roomsPage', lang);
+const rooms = await getRooms(lang);
+---
+
+<section class="page-hero container">
+  <header class="page-hero__head" data-reveal>
+    <p class="eyebrow">{page.meta.title}</p>
+    <h1 class="page-hero__title">
+      {page.title}
+      {page.accent && <span class="accent">{page.accent}</span>}
+    </h1>
+    <p class="page-hero__text">{page.text}</p>
+  </header>
+  <nav aria-label={tr('rooms.types')} data-reveal>
+    <ul class="room-pills">
+      {
+        rooms.map((room) => (
+          <li>
+            <a class="topic-pill" href={`#${room.data.urlSlug}`}>
+              {room.data.name}
+              {room.data.badge && <span class="topic-pill__count">{room.data.badge}</span>}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</section>
+
+<div class="rooms-list container">
+  {
+    rooms.map((room, i) => (
+      <section class="room" id={room.data.urlSlug} aria-labelledby={`${room.data.urlSlug}-title`}>
+        <div class="room__media" data-reveal>
+          <Carousel photos={room.data.gallery} label={`${tr('carousel.photosOf')} ${room.data.name}`} lang={lang} eager={i === 0} />
+        </div>
+        <div class="room__info" data-reveal>
+          <h2 class="room__title" id={`${room.data.urlSlug}-title`}>
+            {room.data.name}
+            {room.data.badge && <span class="room__badge">{room.data.badge}</span>}
+          </h2>
+          <p class="room__text">{room.data.description}</p>
+          <ul class="room__highlights">
+            {room.data.highlights.map((item) => (
+              <li class="tag">{item}</li>
+            ))}
+          </ul>
+          <div class="room__features">
+            <h3 class="room__features-title">{page.featuresTitle}</h3>
+            <FaqList items={room.data.features.map((group) => ({ question: group.title, list: group.items }))} />
+          </div>
+        </div>
+      </section>
+    ))
+  }
+</div>
+
+<ContactCard lang={lang} {...page.contact} />

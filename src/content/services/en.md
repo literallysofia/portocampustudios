@@ -9,12 +9,6 @@ items:
   - icon: droplet
     title: Water
     text: Included in the rent.
-  - icon: bath
-    title: Private bathroom
-    text: Bathroom with shower in the studios and the studio apartment.
-  - icon: kitchen
-    title: Kitchenette
-    text: Microwave, fridge and induction hob.
   - icon: garden
     title: Garden with BBQ
     text: Shared outdoor space to unwind and hang out.

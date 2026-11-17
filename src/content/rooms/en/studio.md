@@ -3,7 +3,6 @@ urlSlug: studio
 order: 1
 name: Studio
 badge: ×4
-nicknames: [Pulp Fiction, Star Wars, The Shining, La La Land]
 summary: A duplex with a mezzanine, kitchenette and private bathroom. The pick for anyone who wants their own corner.
 description: Four semi-detached studios over two levels. Downstairs is the living area with a kitchenette, table and sofa; the bedroom sits upstairs on the mezzanine. Designed for one person, with room to study, cook and rest without leaving home.
 highlights:

@@ -4,7 +4,8 @@
  * The location page, in two clearly separate halves:
  * 1. Getting here: headline facts, the map, every way to arrive and the
  *    faculties around the house.
- * 2. Discover Porto: a navy band with every spot worth seeing in one grid.
+ * 2. Discover Porto: a grey band with every spot worth seeing in one grid.
+ * Then the booking reminder (ContactCard).
  *    Each card's id matches the pills on Home (/location/#lello), and the
  *    card you land on gets a short highlight.
  */
@@ -13,7 +14,7 @@ import Sticker from '../components/Sticker.astro';
 import Icon from '../components/Icon.astro';
 import Map from '../components/Map.astro';
 import FaqList from '../components/FaqList.astro';
-import CtaBand from '../components/CtaBand.astro';
+import ContactCard from '../components/ContactCard.astro';
 import { getLocaleEntry } from '../lib/content';
 import type { Locale } from '../i18n';
 
@@ -24,7 +25,6 @@ interface Props {
 const { lang } = Astro.props;
 
 const { data: location } = await getLocaleEntry('location', lang);
-const { data: home } = await getLocaleEntry('home', lang);
 
 const institutionGroups = location.institutions.groups.map((group) => ({
   question: `${group.title} · ${group.items.length}`,
@@ -93,7 +93,7 @@ const institutionGroups = location.institutions.groups.map((group) => ({
     <ul class="campus__chips">
       {
         location.nearby.items.map((item, i) => (
-          <li class:list={['campus__chip', i === 0 && 'campus__chip--green']}>{item}</li>
+          <li class:list={['tag', i === 0 && 'tag--strong']}>{item}</li>
         ))
       }
     </ul>
@@ -127,9 +127,8 @@ const institutionGroups = location.institutions.groups.map((group) => ({
   </div>
 </section>
 
-<div class="location-cta">
-  <CtaBand lang={lang} {...home.cta} />
-</div>
+<ContactCard lang={lang} {...location.contact} />
+
 
 <script>
   // Scroll to the anchor a Home link points at: a spot (/location/#lello),

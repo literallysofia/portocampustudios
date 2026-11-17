@@ -142,4 +142,7 @@ places:
       name: Foz do Douro
       text: Where the river meets the sea. Seafront promenade, terraces and sunsets.
       image: ../../assets/photos/city/places/foz.jpg
+contact:
+  title: Want to come and see?
+  text: We'll set up a visit. Get in touch by email or WhatsApp.
 ---

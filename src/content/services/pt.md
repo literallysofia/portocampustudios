@@ -9,12 +9,6 @@ items:
   - icon: droplet
     title: Água
     text: Incluída na renda.
-  - icon: bath
-    title: WC privativo
-    text: Casa de banho com duche nos estúdios e no T0.
-  - icon: kitchen
-    title: Kitchenette
-    text: Micro-ondas, frigorífico e placa de indução.
   - icon: garden
     title: Jardim com BBQ
     text: Espaço exterior partilhado para relaxar e conviver.

@@ -69,7 +69,7 @@ const items = navItems(lang);
         }
       </ul>
       <div class="mobile-menu__item mobile-menu__extras" style={`--i:${items.length}`}>
-        <a class="button button--accent mobile-menu__book" href={path(lang, 'book')}>{tr('nav.book')}</a>
+        <a class="button button--light mobile-menu__book" href={path(lang, 'book')}>{tr('nav.book')}</a>
         <div class="mobile-menu__meta">
           <LangToggle lang={lang} alternates={alternates} dark />
           <a class="mobile-menu__email" href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>

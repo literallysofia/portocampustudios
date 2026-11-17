@@ -18,6 +18,9 @@ const sectionHead = z.object({
   text: z.string().optional(),
 });
 
+/** The end-of-page card on inner pages: a heading, a line and the contact buttons */
+const contactCard = z.object({ title: z.string(), text: z.string() });
+
 /** Home page: hero, intro and the heading of every section */
 const home = defineCollection({
   loader: localeFiles('home'),
@@ -61,8 +64,6 @@ const rooms = defineCollection({
       name: z.string(),
       /** Small label on the card, e.g. "×4" */
       badge: z.string().optional(),
-      /** Fun names of the individual units */
-      nicknames: z.array(z.string()).default([]),
       summary: z.string(),
       description: z.string(),
       highlights: z.array(z.string()),
@@ -89,6 +90,7 @@ const location = defineCollection({
       meta: z.object({ title: z.string(), description: z.string() }),
       intro: z.object({ title: z.string(), accent: z.string().optional(), text: z.string() }),
       highlights: z.array(z.object({ value: z.string(), label: z.string() })),
+      contact: contactCard,
       transport: z.array(
         z.object({
           icon: z.string(),
@@ -112,6 +114,20 @@ const location = defineCollection({
     }),
 });
 
+/** Rooms page copy; the rooms themselves live in the rooms collection */
+const roomsPage = defineCollection({
+  loader: localeFiles('rooms-page'),
+  schema: z.object({
+    meta: z.object({ title: z.string(), description: z.string() }),
+    title: z.string(),
+    accent: z.string().optional(),
+    text: z.string(),
+    /** Heading above each room's fold-out breakdown */
+    featuresTitle: z.string(),
+    contact: contactCard,
+  }),
+});
+
 const faq = defineCollection({
   loader: localeFiles('faq'),
   schema: z.object({
@@ -121,7 +137,7 @@ const faq = defineCollection({
     accent: z.string().optional(),
     text: z.string(),
     /** "Still have questions?" card after the last group */
-    contact: z.object({ title: z.string(), text: z.string() }),
+    contact: contactCard,
     groups: z.array(
       z.object({
         /** Anchor for the topic pills, English: /faq/#contract */
@@ -151,4 +167,4 @@ const book = defineCollection({
   }),
 });
 
-export const collections = { home, rooms, services, location, faq, book };
+export const collections = { home, rooms, roomsPage, services, location, faq, book };

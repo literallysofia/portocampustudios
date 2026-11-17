@@ -1,0 +1,107 @@
+---
+/**
+ * Carousel
+ * A swipeable row of photos built on native scroll snapping, so it works
+ * by touch, trackpad and keyboard even without JavaScript. With JS: arrow
+ * buttons, a "3 / 12" counter and left/right keys.
+ *
+ * @prop photos - { src, alt }[] from a content collection
+ * @prop label - accessible name, e.g. "Fotos do Estúdio"
+ * @prop lang - language of the button labels
+ * @prop eager - load the first photo right away (first carousel on the page)
+ */
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import Icon from './Icon.astro';
+import { t, type Locale } from '../i18n';
+
+interface Props {
+  photos: { src: ImageMetadata; alt: string }[];
+  label: string;
+  lang: Locale;
+  eager?: boolean;
+}
+
+const { photos, label, lang, eager = false } = Astro.props;
+const tr = t(lang);
+---
+
+<div class="carousel" data-carousel>
+  <ul class="carousel__track" tabindex="0" aria-label={label} data-carousel-track>
+    {
+      photos.map((photo, i) => (
+        <li class="carousel__slide" aria-label={`${i + 1} / ${photos.length}`}>
+          <Image
+            src={photo.src}
+            alt={photo.alt}
+            widths={[640, 960, 1280, 1600]}
+            sizes="(max-width: 900px) 92vw, 50vw"
+            loading={eager && i === 0 ? 'eager' : 'lazy'}
+          />
+        </li>
+      ))
+    }
+  </ul>
+  <button class="carousel__arrow carousel__arrow--prev" type="button" aria-label={tr('carousel.prev')} data-carousel-prev hidden>
+    <Icon name="arrow" size="1.2rem" />
+  </button>
+  <button class="carousel__arrow carousel__arrow--next" type="button" aria-label={tr('carousel.next')} data-carousel-next hidden>
+    <Icon name="arrow" size="1.2rem" />
+  </button>
+  <p class="carousel__count" aria-hidden="true">
+    <span data-carousel-current>1</span> / {photos.length}
+  </p>
+</div>
+
+<script>
+  function initCarousels(): void {
+    document.querySelectorAll<HTMLElement>('[data-carousel]').forEach((carousel) => {
+      const track = carousel.querySelector<HTMLElement>('[data-carousel-track]');
+      const prev = carousel.querySelector<HTMLButtonElement>('[data-carousel-prev]');
+      const next = carousel.querySelector<HTMLButtonElement>('[data-carousel-next]');
+      const current = carousel.querySelector<HTMLElement>('[data-carousel-current]');
+      if (!track || !prev || !next || !current) return;
+
+      const count = track.children.length;
+      const index = () => Math.round(track.scrollLeft / track.clientWidth);
+      // Where the carousel is heading. Quick repeated clicks build on it
+      // instead of on the half-scrolled position, so none get lost.
+      let target = 0;
+      let settle: number | undefined;
+
+      const show = (i: number) => {
+        current.textContent = String(i + 1);
+        prev.disabled = i === 0;
+        next.disabled = i >= count - 1;
+      };
+      const go = (step: number) => {
+        target = Math.min(count - 1, Math.max(0, target + step));
+        show(target);
+        track.scrollTo({ left: target * track.clientWidth, behavior: 'smooth' });
+      };
+      // Swipes and keyboard scrolling: follow the photo in view, and once
+      // scrolling stops, take it as the new starting point
+      const update = () => {
+        window.clearTimeout(settle);
+        settle = window.setTimeout(() => {
+          target = index();
+          show(target);
+        }, 120);
+      };
+
+      prev.hidden = next.hidden = count < 2;
+      prev.addEventListener('click', () => go(-1));
+      next.addEventListener('click', () => go(1));
+      track.addEventListener('scroll', update, { passive: true });
+      track.addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+          event.preventDefault();
+          go(event.key === 'ArrowLeft' ? -1 : 1);
+        }
+      });
+      show(0);
+    });
+  }
+
+  document.addEventListener('astro:page-load', initCarousels);
+</script>

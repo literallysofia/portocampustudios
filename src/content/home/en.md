@@ -16,8 +16,8 @@ intro:
   facts:
     - value: '6'
       label: homes in a private complex
-    - value: '9'
-      label: services included
+    - value: '3'
+      label: types of home
     - value: '2017'
       label: welcoming students since
   photos:
