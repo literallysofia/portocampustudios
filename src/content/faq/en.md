@@ -2,10 +2,15 @@
 meta:
   title: FAQ
   description: Everything you need to know before booking at Porto Campus Studios, from requirements and contracts to house rules.
-title: Frequently asked questions
+title: Frequently asked
+accent: questions
 text: Can't find what you're looking for? Send us a message and we'll get back to you as soon as we can.
+contact:
+  title: Still have questions?
+  text: Ask us anything by email or WhatsApp.
 groups:
-  - title: Applying
+  - id: applying
+    title: Applying
     items:
       - question: What homes do you have?
         answer: Four semi-detached studios with a mezzanine, one studio apartment and a four-bedroom house.
@@ -18,7 +23,8 @@ groups:
         featured: true
       - question: Can I visit before booking?
         answer: Of course. Get in touch and we'll arrange a visit.
-  - title: Contract and payments
+  - id: contract
+    title: Contract and payments
     items:
       - question: How much does it cost?
         answer: It depends on the home and your dates. Get in touch and we'll send you an up-to-date quote. Water, cable TV and internet are included; electricity is paid separately.
@@ -27,7 +33,8 @@ groups:
         answer: Contracts are 10 months by default. Every faculty has its own calendar, so tell us which months you'd like to leave out; the home is vacated during those months.
       - question: Is cleaning included?
         answer: No, but you can add a cleaning service for an extra fee.
-  - title: Living here
+  - id: living
+    title: Living here
     items:
       - question: Are the homes furnished?
         answer: Yes, they're furnished and come with an equipped kitchenette. For a full academic year, bring your own bedding, towels and kitchenware. For a few weeks' stay, you don't need to worry.

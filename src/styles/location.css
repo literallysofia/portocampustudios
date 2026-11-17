@@ -8,32 +8,8 @@
    ================================================ */
 
 /* ================================================
-   HERO
+   HERO FACTS (the heading itself is .page-hero, global.css)
    ================================================ */
-
-.location-hero {
-  display: grid;
-  gap: var(--spacing-md);
-  padding-top: var(--spacing-lg);
-}
-
-.location-hero__head {
-  display: grid;
-  gap: var(--spacing-sm);
-  /* Ends exactly where the second fact card ends (2 of 3 columns + 1 gap) */
-  width: calc((100% - 2 * var(--spacing-sm)) * 2 / 3 + var(--spacing-sm));
-}
-
-.location-hero__title {
-  font-size: clamp(2.75rem, 1.4rem + 5.2vw, 6rem);
-  line-height: 0.95;
-  letter-spacing: -0.04em;
-}
-
-.location-hero__text {
-  font-size: var(--text-lg);
-  color: var(--color-text-muted);
-}
 
 .location-facts {
   display: grid;
@@ -298,19 +274,7 @@
   }
 }
 
-/* Same breakpoint as the mobile menu (chrome.css): the heading snaps to the
-   full width together with the header */
-@media (max-width: 900px) {
-  .location-hero__head {
-    width: auto;
-  }
-}
-
 @media (max-width: 768px) {
-  .location-hero {
-    padding-top: var(--spacing-md);
-  }
-
   .location-facts {
     gap: 0.5rem;
   }

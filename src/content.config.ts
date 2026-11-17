@@ -117,9 +117,15 @@ const faq = defineCollection({
   schema: z.object({
     meta: z.object({ title: z.string(), description: z.string() }),
     title: z.string(),
+    /** Last words of the title, highlighted */
+    accent: z.string().optional(),
     text: z.string(),
+    /** "Still have questions?" card after the last group */
+    contact: z.object({ title: z.string(), text: z.string() }),
     groups: z.array(
       z.object({
+        /** Anchor for the topic pills, English: /faq/#contract */
+        id: z.string(),
         title: z.string(),
         items: z.array(
           z.object({

@@ -119,6 +119,46 @@ p {
   color: var(--color-text-muted);
 }
 
+/* Top of every inner page (Location, FAQ): eyebrow, big title, intro.
+   The heading spans 2 of 3 columns, so on Location it ends exactly where
+   the second fact card ends */
+.page-hero {
+  display: grid;
+  gap: var(--spacing-md);
+  padding-top: var(--spacing-lg);
+}
+
+.page-hero__head {
+  display: grid;
+  gap: var(--spacing-sm);
+  width: calc((100% - 2 * var(--spacing-sm)) * 2 / 3 + var(--spacing-sm));
+}
+
+.page-hero__title {
+  font-size: clamp(2.75rem, 1.4rem + 5.2vw, 6rem);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+}
+
+.page-hero__text {
+  font-size: var(--text-lg);
+  color: var(--color-text-muted);
+}
+
+/* Same breakpoint as the mobile menu (chrome.css): the heading snaps to the
+   full width together with the header */
+@media (max-width: 900px) {
+  .page-hero__head {
+    width: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-hero {
+    padding-top: var(--spacing-md);
+  }
+}
+
 .eyebrow {
   font-size: var(--text-sm);
   font-weight: 500;

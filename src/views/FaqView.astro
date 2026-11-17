@@ -1,0 +1,126 @@
+---
+/**
+ * FaqView
+ * Every question, grouped by topic. On wide screens the topic pills stay
+ * on screen next to the questions, jump to their group (/faq/#contract) and
+ * light up for the group you're reading; on mobile they wrap above the
+ * questions, without the highlight. A "still have questions?" card closes the page.
+ */
+import Icon from '../components/Icon.astro';
+import FaqList from '../components/FaqList.astro';
+import { getLocaleEntry } from '../lib/content';
+import { siteConfig } from '../config';
+import { t, type Locale } from '../i18n';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const tr = t(lang);
+
+const { data: faq } = await getLocaleEntry('faq', lang);
+
+// Plain contact links: these are questions, not booking requests, so no prefilled message
+const whatsapp = `https://wa.me/${siteConfig.phone.replace(/\D/g, '')}`;
+---
+
+<section class="page-hero container">
+  <header class="page-hero__head" data-reveal>
+    <p class="eyebrow">{tr('nav.faq')}</p>
+    <h1 class="page-hero__title">
+      {faq.title}
+      {faq.accent && <span class="accent">{faq.accent}</span>}
+    </h1>
+    <p class="page-hero__text">{faq.text}</p>
+  </header>
+</section>
+
+<div class="faq-page container section">
+  <nav class="faq-topics" aria-label={tr('faq.topics')}>
+    <ul class="faq-topics__list">
+      {
+        faq.groups.map((group, i) => (
+          <li>
+            <a class:list={['faq-topics__link', i === 0 && 'is-active']} href={`#${group.id}`} data-topic={group.id}>
+              {group.title}
+              <span class="faq-topics__count">{group.items.length}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+
+  <div class="faq-page__groups">
+    {
+      faq.groups.map((group) => (
+        <section class="faq-group" id={group.id} aria-labelledby={`${group.id}-title`} data-reveal>
+          <h2 class="faq-group__title" id={`${group.id}-title`}>
+            {group.title}
+          </h2>
+          <FaqList items={group.items} />
+        </section>
+      ))
+    }
+
+    <aside class="faq-contact" data-reveal>
+      <div>
+        <h2 class="faq-contact__title">{faq.contact.title}</h2>
+        <p class="faq-contact__text">{faq.contact.text}</p>
+      </div>
+      <div class="faq-contact__actions">
+        <a class="button button--ghost" href={`mailto:${siteConfig.email}`}>
+          <Icon name="mail" />
+          {tr('cta.email')}
+        </a>
+        <a class="button button--ghost" href={whatsapp} target="_blank" rel="noopener">
+          <Icon name="whatsapp" />
+          {tr('cta.whatsapp')}
+        </a>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script>
+  // Light up the topic pill of the group being read: the last group whose
+  // top has passed a line a third of the way down the screen, or the first
+  // group when none has (top of the page). Recomputed on every scroll, so it
+  // can't get stuck the way enter/leave events did when scrolling back up.
+  let onScroll: (() => void) | undefined;
+
+  function initTopics(): void {
+    if (onScroll) window.removeEventListener('scroll', onScroll);
+    const links = [...document.querySelectorAll<HTMLAnchorElement>('[data-topic]')];
+    const groups = links.map((link) => document.getElementById(link.dataset.topic ?? '')).filter((g) => g !== null);
+    if (!groups.length) return;
+
+    let queued = false;
+    const update = () => {
+      queued = false;
+      const line = window.innerHeight / 3;
+      const current = groups.filter((group) => group.getBoundingClientRect().top <= line).pop() ?? groups[0];
+      links.forEach((link) => link.classList.toggle('is-active', link.dataset.topic === current.id));
+    };
+    onScroll = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(update);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    // After a client-router swap the browser doesn't scroll to the hash itself
+    const target = location.hash ? document.getElementById(decodeURIComponent(location.hash.slice(1))) : null;
+    if (target) target.scrollIntoView({ block: 'start', behavior: 'instant' });
+    update();
+  }
+
+  // Stop listening when the client router swaps to another page
+  document.addEventListener('astro:before-swap', () => {
+    if (onScroll) window.removeEventListener('scroll', onScroll);
+    onScroll = undefined;
+  });
+
+  document.addEventListener('astro:page-load', initTopics);
+</script>

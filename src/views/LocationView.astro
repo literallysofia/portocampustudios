@@ -32,14 +32,14 @@ const institutionGroups = location.institutions.groups.map((group) => ({
 }));
 ---
 
-<section class="location-hero container">
-  <header class="location-hero__head" data-reveal>
+<section class="page-hero container">
+  <header class="page-hero__head" data-reveal>
     <p class="eyebrow">{location.meta.title}</p>
-    <h1 class="location-hero__title">
+    <h1 class="page-hero__title">
       {location.intro.title}
       {location.intro.accent && <span class="accent">{location.intro.accent}</span>}
     </h1>
-    <p class="location-hero__text">{location.intro.text}</p>
+    <p class="page-hero__text">{location.intro.text}</p>
   </header>
   <dl class="location-facts" data-reveal>
     {

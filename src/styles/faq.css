@@ -1,0 +1,154 @@
+/* ================================================
+   FAQ PAGE
+   ================================================
+   Topic pills on the left (sticky on wide screens), grouped
+   questions on the right, then a contact card. The accordion
+   itself (.faq-list, .faq-item) lives in home.css.
+   ================================================ */
+
+.faq-page {
+  display: grid;
+  /* Same proportions as the FAQ teaser on Home */
+  grid-template-columns: minmax(min-content, 0.75fr) minmax(0, 2.25fr);
+  gap: clamp(2.5rem, 5vw, 6rem);
+  align-items: start;
+  padding-top: var(--spacing-lg);
+}
+
+.faq-topics {
+  position: sticky;
+  top: calc(var(--header-height) + var(--spacing-sm));
+}
+
+.faq-topics__list {
+  display: grid;
+  gap: 0.5rem;
+  justify-items: start;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.faq-topics__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 0.6rem 0.55rem 1rem;
+  border-radius: var(--radius-pill);
+  box-shadow: inset 0 0 0 1.5px var(--color-border);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-text);
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background-color var(--duration-fast),
+    box-shadow var(--duration-fast),
+    color var(--duration-fast);
+}
+
+.faq-topics__count {
+  display: grid;
+  place-items: center;
+  min-width: 1.6rem;
+  height: 1.6rem;
+  padding-inline: 0.4rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (hover: hover) {
+  .faq-topics__link:hover {
+    box-shadow: inset 0 0 0 1.5px var(--color-text);
+  }
+}
+
+/* The group you're reading, same green as the campus chips. Wide screens
+   only: on mobile the pills scroll away with the page, so a highlight
+   would just stay stuck on one topic */
+@media (min-width: 901px) {
+  .faq-topics__link.is-active {
+    background: var(--color-green-soft);
+    box-shadow: inset 0 0 0 1.5px var(--color-green);
+    color: var(--color-green-text);
+  }
+
+  .faq-topics__link.is-active .faq-topics__count {
+    background: var(--color-green);
+  }
+}
+
+.faq-page__groups {
+  display: grid;
+  gap: var(--spacing-lg);
+}
+
+.faq-group__title {
+  margin-bottom: var(--spacing-sm);
+  font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+}
+
+.faq-contact {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm) var(--spacing-md);
+  padding: clamp(1.25rem, 0.8rem + 1.5vw, 2rem);
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+}
+
+.faq-contact__title {
+  font-size: 1.35rem;
+}
+
+.faq-contact__text {
+  margin-top: 0.25rem;
+  color: var(--color-text-muted);
+}
+
+.faq-contact__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* ================================================
+   RESPONSIVE
+   ================================================ */
+
+/* With the mobile menu, the pills move above the questions and wrap, so
+   every topic is visible without scrolling sideways */
+@media (max-width: 900px) {
+  .faq-page {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--spacing-md);
+    padding-top: var(--spacing-md);
+  }
+
+  .faq-topics {
+    position: static;
+  }
+
+  .faq-topics__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  /* A touch smaller, so two topics share a line on a phone */
+  .faq-topics__link {
+    gap: 0.45rem;
+    padding: 0.4rem 0.45rem 0.4rem 0.8rem;
+    font-size: 0.8125rem;
+  }
+
+  .faq-topics__count {
+    min-width: 1.4rem;
+    height: 1.4rem;
+    font-size: 0.75rem;
+  }
+}

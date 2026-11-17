@@ -2,10 +2,15 @@
 meta:
   title: Perguntas frequentes
   description: Tudo o que precisas de saber antes de reservar no Porto Campus Studios, de requisitos e contratos às regras da casa.
-title: Perguntas frequentes
+title: Perguntas
+accent: frequentes
 text: Não encontras o que procuras? Envia-nos uma mensagem e respondemos o mais depressa possível.
+contact:
+  title: Ainda tens dúvidas?
+  text: Pergunta-nos o que quiseres por email ou WhatsApp.
 groups:
-  - title: Candidatura
+  - id: applying
+    title: Candidatura
     items:
       - question: Que habitações têm disponíveis?
         answer: Temos quatro estúdios geminados com mezanine, um apartamento T0 e um T4 com quatro quartos.
@@ -18,7 +23,8 @@ groups:
         featured: true
       - question: Posso visitar antes de reservar?
         answer: Claro. Fala connosco e marcamos uma visita.
-  - title: Contrato e pagamentos
+  - id: contract
+    title: Contrato e pagamentos
     items:
       - question: Quanto custa?
         answer: O valor depende da habitação e das datas. Fala connosco para recebermos uma proposta atualizada. Água, TV por cabo e internet estão incluídas; a eletricidade é paga à parte.
@@ -27,7 +33,8 @@ groups:
         answer: Por defeito, os contratos são de 10 meses. Como cada faculdade tem o seu calendário, diz-nos que meses queres excluir; durante esses meses, a habitação fica livre.
       - question: A limpeza está incluída?
         answer: Não, mas podes pedir o serviço de limpeza por um valor adicional.
-  - title: Estadia e regras
+  - id: living
+    title: Estadia e regras
     items:
       - question: As habitações estão equipadas?
         answer: Sim, estão mobiladas e com kitchenette equipada. Para estadias de um ano letivo, traz a tua roupa de cama, toalhas e utensílios de cozinha. Em estadias de poucas semanas, não precisas de te preocupar.
